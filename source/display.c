@@ -6,7 +6,6 @@
 	* 3:DO-ÉÏV-k-M-DI-WH-ÉÏA-AL1
 	* 4-15:right->left,down->up
 	*/
-
 unsigned char menu0_buf[16];
 unsigned char menu1_buf[16];
 unsigned char menu2_buf[16];

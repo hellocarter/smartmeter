@@ -1,24 +1,32 @@
 #include "stm32f10x.h"
 #include "display.h"
-#include "TM1629C.h"
+#include "measure.h"
+#include "configs.h"                     
+
 uint8_t keys[4]={0};
 int time=0;
 uint16_t count_key=0;
 uint8_t fast_key=0;
+
 //一级菜单flag
-uint8_t disp_flag=0;
+uint8_t menu_flag=0,menu_flag_last=0;
 const uint8_t DISP_MAX=5;
 void update_param();
-int main(){
 
+int main(){
+	
 	int i,n;
-	uint16_t volts[3]={2210,2208,2209};
-	uint8_t dots[3]={1,1,1};
-	
+
 	SysTick_Config(SystemCoreClock  / 1000);	
-	display_init();
 	
+	//delay for device init
+	while(time<500);
+
+	display_init();
+	measure_init();
+	load_configs();
 	while(1){
+		
 		display_getkeys();
 		if(KEY_SET)
 		{
@@ -26,15 +34,19 @@ int main(){
 			{
 				display_getkeys();
 			}
-			disp_flag++;
-			if(disp_flag>DISP_MAX)
+			menu_flag++;
+			if(menu_flag>DISP_MAX)
 			{
-				disp_flag=0;
+				menu_flag=0;
 			}			
 		}
-		switch (disp_flag){
+		switch (menu_flag){
 			case 0:
 				display_menu0();
+				if(menu_flag_last!=0)
+				{
+					configs_save();
+				}
 				break;
 			case 1:
 				display_menu1();
@@ -52,27 +64,31 @@ int main(){
 				display_menu5();
 				break;
 		}
-		if(disp_flag>0){
+		if(menu_flag>0)
+		{
 			update_param();
-			if(KEY_ENTER){
+			if(KEY_ENTER)
+			{
 				while(KEY_ENTER)
 				{
 					display_getkeys();
 				}
-				disp_flag=0;
+				configs_save();
+				menu_flag=0;
 			}
 		}
-		if(!(KEY_SET||KEY_ENTER||KEY_LEFT||KEY_RIGHT)){
+		if(!(KEY_SET||KEY_ENTER||KEY_LEFT||KEY_RIGHT))
+		{
 			fast_key=0;
 		}
-		
+		menu_flag_last = menu_flag;
 	}
 	return 0;
 }
 void update_param()
 {
 	//设置显示电压或电流
-	if(disp_flag==1)
+	if(menu_flag==1)
 	{
 		if(KEY_LEFT||KEY_RIGHT)
 		{
@@ -88,7 +104,7 @@ void update_param()
 		}
 	}
 	//设置电压变比
-	if(disp_flag==2){
+	if(menu_flag==2){
 		if(KEY_LEFT||KEY_RIGHT){
 			
 			if(KEY_LEFT){
@@ -117,7 +133,7 @@ void update_param()
 		}
 	}
 	//设置电流变比
-	if(disp_flag==3){
+	if(menu_flag==3){
 		if(KEY_LEFT||KEY_RIGHT){
 			
 			if(KEY_LEFT){
@@ -146,7 +162,7 @@ void update_param()
 		}
 	}
 	//设置波特率
-	if(disp_flag==4){
+	if(menu_flag==4){
 		if(KEY_LEFT||KEY_RIGHT){
 			if(KEY_LEFT){
 				baud_index++;
@@ -166,7 +182,7 @@ void update_param()
 		}
 	}
 	//设置通讯地址
-	if(disp_flag==5){
+	if(menu_flag==5){
 		if(KEY_LEFT||KEY_RIGHT){
 			if(KEY_LEFT){
 				com_addr++;
