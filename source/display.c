@@ -1,4 +1,5 @@
 #include "display.h"
+#include "stdio.h"
 /**
 	* 0:NA
 	* 1:上b-下c-sigma-中b-上a-var-中c-中a
@@ -28,7 +29,7 @@ s_dotnum st_volt[3];
 //三相电流
 s_dotnum st_current[3];
 
-//电压或者电流
+//电压或者电流,1电压，0电流
 uint8_t show_flag;
 
 //电压电流变比
@@ -138,6 +139,7 @@ void show_voltage()
 	
 	display_refresh(menu0_buf);
 }
+//显示测量值
 void display_menu0()
 {
 	if(show_flag)
@@ -226,3 +228,62 @@ void display_getkeys()
 	KEY_ENTER=buf[1]&0x0f;
 }
 
+static void convert(float v,s_dotnum *st)
+{
+	int32_t tmp;
+	char buf[10];
+	uint16_t i;
+	uint16_t mult=0;
+	if(v<0)
+	{
+		v=0.0;
+	}
+	if(v>9999)
+	{
+		v=9999.0;
+	}
+	sprintf(buf,"%f",v);
+	for(i=0;i<4;i++)
+	{
+		if(buf[i]=='.')
+		{
+			break;
+		}
+	}
+	if(i==1)
+	{
+		mult = 1000;
+	}
+	else if(i == 2)
+	{
+		mult = 100;
+	}
+	else if(i==3)
+	{
+		mult = 10;
+	}
+	else if(i==4)
+	{
+		mult = 1;
+	}
+	
+	st->number = v*mult;
+	st->dot = 4-i;
+	
+}
+void display_set_volts(float *volts)
+{
+	char i;
+	for(i=0;i<3;i++)
+	{
+		convert(volts[2-i]*volt_ratio,st_volt+i);
+	}	
+}
+void display_set_currents(float *currents)
+{
+	char i;
+	for(i=0;i<3;i++)
+	{
+		convert(currents[2-i]*current_ratio,st_current+i);
+	}	
+}

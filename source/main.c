@@ -2,6 +2,7 @@
 #include "display.h"
 #include "measure.h"
 #include "configs.h"                     
+#include "stdio.h"
 
 uint8_t keys[4]={0};
 int time=0;
@@ -13,10 +14,11 @@ uint8_t menu_flag=0,menu_flag_last=0;
 const uint8_t DISP_MAX=5;
 void update_param();
 
+char buf[10];
 int main(){
 	
 	int i,n;
-
+	float f[3]={0.001,0.01,0.1};
 	SysTick_Config(SystemCoreClock  / 1000);	
 	
 	//delay for device init
@@ -25,6 +27,9 @@ int main(){
 	display_init();
 	measure_init();
 	load_configs();
+	
+ display_set_volts( f);
+//sprintf(buf,"%f",)
 	while(1){
 		
 		display_getkeys();
@@ -210,7 +215,27 @@ void update_param()
 		}
 	}
 }
-void SysTick_Handler(void){
+//更新测量值到显示值
+void measure_disp()
+{
+	if(show_flag)
+	{
+		display_set_volts(convert_volts);
+	}
+	else
+	{
+		display_set_currents(convert_currents);
+	}
+	
+}
+void SysTick_Handler(void)
+{
+	char is_update;		
+	is_update = measure_update();
+	if(is_update)
+	{
+		measure_disp();
+	}
 	time++;	
 	count_key++;
 }
