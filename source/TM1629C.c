@@ -4,9 +4,9 @@
  
 #include "TM1629C.h"
 
-#define DIO GPIO_Pin_13
+#define DIO GPIO_Pin_15
 #define CLK GPIO_Pin_14
-#define STB  GPIO_Pin_15
+#define STB  GPIO_Pin_13
 
 static const int WAITTIME = 1;
 

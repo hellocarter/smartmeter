@@ -1,4 +1,5 @@
 #include "display.h"
+#include "configs.h"
 #include "stdio.h"
 /**
 	* 0:NA
@@ -13,6 +14,7 @@ unsigned char menu2_buf[16];
 unsigned char menu3_buf[16];
 unsigned char menu4_buf[16];
 unsigned char menu5_buf[16];
+
 const unsigned char NUM_TAB[16]={0x5f,0x05,0xd9,0x9d,0x87,0x9e,0xde,0x15,0xdf,0x9f,0xd7,0xce,0x5a,0xcd,0xda,0xd2};
 const unsigned char ADD_DOT=0x20;
 const unsigned char CHAR_P=0xD3,CHAR_U=0x4f,CHAR_T=0xca,CHAR_R=0xc0;
@@ -22,28 +24,18 @@ unsigned char KEY_RIGHT=0;
 unsigned char KEY_SET=0;
 unsigned char KEY_ENTER=0;
 
-//sys parameters
+typedef struct{
+	uint16_t number;
+	uint8_t dot;
+}s_dotnum;
 
 //三相电压
-s_dotnum st_volt[3];
+static s_dotnum st_volt[3];
 //三相电流
-s_dotnum st_current[3];
+static s_dotnum st_current[3];
 
-//电压或者电流,1电压，0电流
-uint8_t show_flag;
+static const float THRESHOLD = 0.01;
 
-//电压电流变比
-int16_t volt_ratio;
-int16_t current_ratio;
-
-//波特率
-const uint8_t BAUD_NUM=4;
-const uint16_t BAUD_TAB[BAUD_NUM]={1200,2400,4800,9600};
-int8_t baud_index;
-
-//通讯地址
-int16_t com_addr;
-int16_t ADDR_MAX=247;
 void display_init(void)
 {
 	TM1629C_Init();
@@ -140,26 +132,28 @@ void show_voltage()
 	display_refresh(menu0_buf);
 }
 //显示测量值
-void display_menu0()
+void display_menu0(uint8_t is_volt)
 {
-	if(show_flag)
+	if(is_volt)
 	{
+		display_set_volts(measured_volts);
 		show_voltage();
 	}
 	else
 	{
+		display_set_currents(measured_currents);
 		show_current();
 	}
 }
 //menu1:设置电流电压
 //disp,A,U
-void display_menu1()
+void display_menu1(uint8_t is_volt)
 {
 	menu1_buf[15]=NUM_TAB[0x0d];
 	menu1_buf[14]=NUM_TAB[1];
 	menu1_buf[13]=NUM_TAB[5];
 	menu1_buf[12]=CHAR_P;
-	if(show_flag)
+	if(is_volt)
 	{
 		menu1_buf[8]=CHAR_U;
 	}
@@ -230,9 +224,8 @@ void display_getkeys()
 
 static void convert(float v,s_dotnum *st)
 {
-	int32_t tmp;
-	char buf[10];
-	uint16_t i;
+	uint16_t big_part;
+	uint8_t dot;
 	uint16_t mult=0;
 	if(v<0)
 	{
@@ -242,33 +235,30 @@ static void convert(float v,s_dotnum *st)
 	{
 		v=9999.0;
 	}
-	sprintf(buf,"%f",v);
-	for(i=0;i<4;i++)
-	{
-		if(buf[i]=='.')
-		{
-			break;
-		}
-	}
-	if(i==1)
-	{
-		mult = 1000;
-	}
-	else if(i == 2)
-	{
-		mult = 100;
-	}
-	else if(i==3)
-	{
-		mult = 10;
-	}
-	else if(i==4)
+	big_part = v;
+	if (big_part > 999)
 	{
 		mult = 1;
+		dot = 0;
+	}
+	else if (big_part > 99)
+	{
+		mult = 10;
+		dot = 1;
+	}
+	else if (big_part > 9)
+	{
+		mult = 100;
+		dot = 2;
+	}
+	else
+	{
+		mult = 1000;
+		dot = 3;
 	}
 	
 	st->number = v*mult;
-	st->dot = 4-i;
+	st->dot = dot;
 	
 }
 void display_set_volts(float *volts)
@@ -276,6 +266,10 @@ void display_set_volts(float *volts)
 	char i;
 	for(i=0;i<3;i++)
 	{
+		if (volts[2-i] < THRESHOLD)
+		{
+			volts[2-i] = 0.0;
+		}
 		convert(volts[2-i]*volt_ratio,st_volt+i);
 	}	
 }
@@ -284,6 +278,10 @@ void display_set_currents(float *currents)
 	char i;
 	for(i=0;i<3;i++)
 	{
+		if (currents[2-i] < THRESHOLD)
+		{
+			currents[2-i] = 0.0;
+		}
 		convert(currents[2-i]*current_ratio,st_current+i);
 	}	
 }

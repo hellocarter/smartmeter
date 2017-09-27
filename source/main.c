@@ -1,25 +1,24 @@
 #include "stm32f10x.h"
 #include "display.h"
 #include "measure.h"
-#include "configs.h"                     
+#include "configs.h"                
+#include "modbus.h"
 #include "stdio.h"
 
 uint8_t keys[4]={0};
-int time=0;
+uint32_t time=0;
 uint16_t count_key=0;
 uint8_t fast_key=0;
 
 //一级菜单flag
-uint8_t menu_flag=0,menu_flag_last=0;
+uint8_t menu_flag=0;
+uint8_t menu_flag_last=0;
 const uint8_t DISP_MAX=5;
-void update_param();
+void update_param(void);
 
-char buf[10];
 int main(){
 	
-	int i,n;
-	float f[3]={0.001,0.01,0.1};
-	SysTick_Config(SystemCoreClock  / 1000);	
+	SysTick_Config(SystemCoreClock  / 5000);	
 	
 	//delay for device init
 	while(time<500);
@@ -27,9 +26,8 @@ int main(){
 	display_init();
 	measure_init();
 	load_configs();
+	map_register();
 	
- display_set_volts( f);
-//sprintf(buf,"%f",)
 	while(1){
 		
 		display_getkeys();
@@ -47,14 +45,14 @@ int main(){
 		}
 		switch (menu_flag){
 			case 0:
-				display_menu0();
+				display_menu0(show_flag);
 				if(menu_flag_last!=0)
 				{
 					configs_save();
 				}
 				break;
 			case 1:
-				display_menu1();
+				display_menu1(show_flag);
 				break;
 			case 2:
 				display_menu2();
@@ -90,6 +88,7 @@ int main(){
 	}
 	return 0;
 }
+
 void update_param()
 {
 	//设置显示电压或电流
@@ -220,22 +219,24 @@ void measure_disp()
 {
 	if(show_flag)
 	{
-		display_set_volts(convert_volts);
+		//display_set_volts(convert_volts);
 	}
 	else
 	{
-		display_set_currents(convert_currents);
+		//display_set_currents(convert_currents);
 	}
 	
 }
+
 void SysTick_Handler(void)
 {
 	char is_update;		
 	is_update = measure_update();
-	if(is_update)
-	{
-		measure_disp();
-	}
+	//if(is_update)
+	//{
+		//measure_disp();
+	//}
 	time++;	
 	count_key++;
+	modbus_timer++;
 }
