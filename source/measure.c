@@ -63,7 +63,7 @@ char measure_update()
 		acc_currents[i]+=fun(ADC_Values[i],last_adc[i]);
 		acc_volts[i]+=fun(ADC_Values[i+3],last_adc[i+3]);
 	}
-	
+
 	measure_cnt++;
 	update_cnt++;
 	

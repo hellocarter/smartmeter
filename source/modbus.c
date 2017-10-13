@@ -98,9 +98,12 @@ static void rx_process()
 	uint8_t len;
 	uint16_t start_addr;
 	uint8_t i;
+	uint8_t fun_code = modbus_rx_buf[1];
 	
 	rx_cnt = 0;
-	if (modbus_rx_buf[1] != 0x03)
+	
+	//只识别3,5,6功能码
+	if (fun_code!= 0x03 && fun_code != 0x05 && fun_code != 0x06)
 	{
 		return;
 	}
@@ -108,26 +111,53 @@ static void rx_process()
 	crc = calc_crc(modbus_rx_buf, 6);
 	if ((crc % 256 == modbus_rx_buf[7])&&(crc / 256 == modbus_rx_buf[6]))
 	{
-		start_addr = modbus_rx_buf[2]*256 + modbus_rx_buf[3];
-		len = modbus_rx_buf[4]*256 + modbus_rx_buf[5];
-		if (start_addr + len > REG_MAX)
+		if (fun_code == 0x03)
 		{
-			return;
+			start_addr = modbus_rx_buf[2]*256 + modbus_rx_buf[3];
+			len = modbus_rx_buf[4]*256 + modbus_rx_buf[5];
+			if (start_addr + len > REG_NUM)
+			{
+				return;
+			}
+			
+			modbus_tx_buf[0] = com_addr;
+			modbus_tx_buf[1] = 0x03;
+			modbus_tx_buf[2] = len/256;
+			modbus_tx_buf[3] = len%256;
+			for(i=0;i<len;i++)
+			{
+				modbus_tx_buf[4+i] = *(regs[start_addr+i]);
+			}
+			crc = calc_crc(modbus_tx_buf, 4 + len);
+			modbus_tx_buf[4+len] = crc/256;
+			modbus_tx_buf[4+len+1] = crc%256;
+			Uart_Write(modbus_tx_buf, 4+len+1+1);
 		}
-		
-		modbus_tx_buf[0] = com_addr;
-		modbus_tx_buf[1] = 0x03;
-		modbus_tx_buf[2] = len/256;
-		modbus_tx_buf[3] = len%256;
-		for(i=0;i<len;i++)
+		if (fun_code == 0x05)
 		{
-			modbus_tx_buf[4+i] = *(regs[start_addr+i]);
-			//modbus_tx_buf[4+i] = 0xff;
+			uint16_t addr = modbus_rx_buf[2] * 256 + modbus_rx_buf[3];
+			uint16_t value = modbus_rx_buf[4] * 256 + modbus_rx_buf[5];
+			if (addr == 0x00)
+			{
+				io_out1 = value==0xff00?1:0;
+			}
+			if (addr == 0x01)
+			{
+				io_out2 = value==0xff00?1:0;
+			}
+			Uart_Write(modbus_rx_buf, 8);
 		}
-		crc = calc_crc(modbus_tx_buf, 4 + len);
-		modbus_tx_buf[4+len] = crc/256;
-		modbus_tx_buf[4+len+1] = crc%256;
-		Uart_Write(modbus_tx_buf, 4+len+1+1);
+		if (fun_code == 0x06)
+		{
+			uint16_t addr = modbus_rx_buf[2] * 256 + modbus_rx_buf[3];
+			uint16_t value = modbus_rx_buf[4] * 256 + modbus_rx_buf[5];
+			if (addr == 0x00)
+			{
+				calibration = value;
+				configs_save();
+			}
+			Uart_Write(modbus_rx_buf, 8);
+		}
 	}
 	
 }
@@ -143,7 +173,7 @@ void USART1_IRQHandler(void)
 		}
 		clear_timer();
 		rx_data = USART_ReceiveData(USART1);  
-    if (rx_cnt == 0 && rx_data != com_addr)
+    if (rx_cnt == 0 && rx_data != (com_addr&0xff))
 		{
 			return;
 		}

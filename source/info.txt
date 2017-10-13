@@ -1,0 +1,23 @@
+寄存器映射关系,03功能码读取
+00--show_flag 8b
+01,02--volt_ratio 16b
+03,04--current_ratio 16b
+05,06--baud_rate 16b
+07-08--com_addr 8b
+
+09-12--voltageA 32b
+13-16--voltageB 32b
+17-20--voltageC 32b
+
+21-24--currentA 32b
+25-28--currentB 32b
+29-32--currentC 32b
+
+线圈写入，05功能码
+00,01--out1 16b
+02,03--out2 16b
+
+寄存器写入,06功能码
+00,01--calibration 16b 校准值
+
+

@@ -3,12 +3,15 @@
 #include "measure.h"
 #include "configs.h"                
 #include "modbus.h"
+#include "openio.h"
 #include "stdio.h"
 
 uint8_t keys[4]={0};
 uint32_t time=0;
 uint16_t count_key=0;
 uint8_t fast_key=0;
+
+const uint16_t FAST_KEY_DELAY = 250;
 
 //Ò»¼¶²Ëµ¥flag
 uint8_t menu_flag=0;
@@ -27,6 +30,7 @@ int main(){
 	measure_init();
 	load_configs();
 	map_register();
+	openio_init();
 	
 	while(1){
 		
@@ -85,6 +89,8 @@ int main(){
 			fast_key=0;
 		}
 		menu_flag_last = menu_flag;
+		openio_input();
+    openio_output();
 	}
 	return 0;
 }
@@ -113,23 +119,23 @@ void update_param()
 			
 			if(KEY_LEFT){
 				volt_ratio++;
-				if(volt_ratio==10000){
+				if(volt_ratio>9999){
 					volt_ratio=0;
 				}
 			}
 			if(KEY_RIGHT){
 				volt_ratio--;
-				if(volt_ratio==-1){
+				if(volt_ratio<0){
 					volt_ratio=9999;
 				}
 			}
 			count_key=0;
 			while(KEY_LEFT||KEY_RIGHT){
 				display_getkeys();
-				if(fast_key&&count_key>50){
+				if(fast_key&&count_key>FAST_KEY_DELAY){
 					break;
 				}
-				if(count_key>500){
+				if(count_key>FAST_KEY_DELAY*10){
 					fast_key=1;
 					break;
 				}
@@ -142,23 +148,23 @@ void update_param()
 			
 			if(KEY_LEFT){
 				current_ratio++;
-				if(current_ratio==10000){
+				if(current_ratio>9999){
 					current_ratio=0;
 				}
 			}
 			if(KEY_RIGHT){
 				current_ratio--;
-				if(current_ratio==-1){
+				if(current_ratio<0){
 					current_ratio=9999;
 				}
 			}
 			count_key=0;
 			while(KEY_LEFT||KEY_RIGHT){
 				display_getkeys();
-				if(fast_key&&count_key>50){
+				if(fast_key&&count_key>FAST_KEY_DELAY){
 					break;
 				}
-				if(count_key>500){
+				if(count_key>FAST_KEY_DELAY*10){
 					fast_key=1;
 					break;
 				}
@@ -170,7 +176,7 @@ void update_param()
 		if(KEY_LEFT||KEY_RIGHT){
 			if(KEY_LEFT){
 				baud_index++;
-				if(baud_index==BAUD_NUM){
+				if(baud_index>=BAUD_NUM){
 					baud_index=0;
 				}
 			}
@@ -190,7 +196,7 @@ void update_param()
 		if(KEY_LEFT||KEY_RIGHT){
 			if(KEY_LEFT){
 				com_addr++;
-				if(com_addr==ADDR_MAX+1){
+				if(com_addr>ADDR_MAX){
 					com_addr=0;
 				}
 			}
@@ -203,10 +209,10 @@ void update_param()
 			count_key=0;
 			while(KEY_LEFT||KEY_RIGHT){
 				display_getkeys();
-				if(fast_key&&count_key>50){
+				if(fast_key&&count_key>FAST_KEY_DELAY){
 					break;
 				}
-				if(count_key>500){
+				if(count_key>FAST_KEY_DELAY*10){
 					fast_key=1;
 					break;
 				}

@@ -1,20 +1,26 @@
 #include "UART.h"
-	
+
 void RCC_Config()
 {
   GPIO_InitTypeDef GPIO_InitStructure;
   
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1|RCC_APB2Periph_GPIOA , ENABLE);  
 
+	//PA9-TX
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;                         
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;                   
   GPIO_InitStructure.GPIO_Speed=GPIO_Speed_50MHz;
   GPIO_Init(GPIOA, &GPIO_InitStructure);                          
   
+	//PA10-RX
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;                      
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;          
   GPIO_Init(GPIOA, &GPIO_InitStructure);                         
 
+	//PA8-R/X
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;                      
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;          
+  GPIO_Init(GPIOA, &GPIO_InitStructure); 
 }
 
 void NVIC_Configuration()
@@ -28,6 +34,16 @@ void NVIC_Configuration()
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
   
+}
+
+void Uart_set_tx()
+{
+	GPIO_SetBits(GPIOA,GPIO_Pin_8);
+}
+
+void Uart_set_rx()
+{
+	GPIO_ResetBits(GPIOA,GPIO_Pin_8);
 }
 
 void Uart_Init(const uint32_t baud_rate)
@@ -57,14 +73,21 @@ void Uart_Init(const uint32_t baud_rate)
   USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
   USART_Cmd(USART1, ENABLE);
   
+	Uart_set_rx();
+
 }
 
-void Uart_Write(uint8_t *buf,uint8_t size){
+void Uart_Write(uint8_t *buf,uint8_t size)
+{
 	int i=0;
-	for(i=0;i<size;i++){
+	Uart_set_tx();
+	for(i=0;i<size;i++)
+	{
 		while(USART_GetFlagStatus(USART1, USART_FLAG_TC) !=SET);
-		USART_SendData(USART1,buf[i]) ;
+		USART_SendData(USART1,buf[i]);
 	}
+	while(USART_GetFlagStatus(USART1, USART_FLAG_TC) !=SET);
+	Uart_set_rx();
 }
 
 
