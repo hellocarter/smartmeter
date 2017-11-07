@@ -3,15 +3,26 @@
 #include "ADC.h"
 #include "string.h"
 #include "math.h"
-//#define WITH_REF
+#include "my_math.h"
 
-//电流采样电阻
+#define PI 3.14159265358979323846
+
+//电流采样电阻330
 #define CURRENT_SAMPLE_RES 330
+
+//电压采样电阻510
+#define VOLTAGE_SAMPLE_RES 510
+
+//电压采样分压电阻150k
+#define VOLTAGE_LIMIT_RES 150000
 
 //电流传感器变比
 #define CT_RATIO 2000
 
-//实际电流<-->采样值:5A<-->2.5*0.33/3.3*4096
+//采样电流--采样值,采样电阻510
+#define VOLTAGE_RATIO 0.006470588/4095
+
+//实际电流<-->采样值:5A<-->2.5*0.33/3.3*4096，采样电阻330
 #define CURRENT_RATIO 5/1024
 
 //adc 通道数
@@ -21,16 +32,9 @@ const uint16_t ADC_NUM = 7;
 const uint16_t MEASURE_CYCLES = 5000;
 const uint16_t UPDATE_CYCLES = 5000; // UPDATE_CYCLES mod MEASURE_CYCLES == 0
 
-
-static const float alpha = 1.0;
-
 static uint16_t last_adc[ADC_NUM];
 static uint64_t acc_currents[3];
 static uint64_t acc_volts[3];
-
-static const uint8_t FILTER_LEN = 8;
-static float measure_queue[FILTER_LEN];
-static uint8_t queue_index = 0;
 
 void measure_init()
 {
@@ -72,8 +76,107 @@ char measure_update()
 		
 		for(i=0;i<3;i++)
 		{
-			measured_volts[i] = (1-alpha)*measured_volts[i] + alpha*1.41421*sqrt((float)acc_volts[i+3]/3/MEASURE_CYCLES)*CURRENT_RATIO;
-			measured_currents[i] = (1-alpha)*measured_currents[i] + alpha*1.41421*sqrt((float)(acc_currents[i])/3/MEASURE_CYCLES)*CURRENT_RATIO;
+			//直接计算出采样电阻下电流值
+			measured_volts[i] = 1.41421*sqrt((float)acc_volts[i+3]/3/MEASURE_CYCLES)*VOLTAGE_RATIO;
+			
+			//直接计算出电流值
+			measured_currents[i] = 1.41421*sqrt((float)(acc_currents[i])/3/MEASURE_CYCLES)*CURRENT_RATIO;
+			
+			//小于最小检测电压视为0V
+			if (measured_volts[i] < VOLT_THRESHOLD)
+			{
+				measured_volts[i] = 0.0;
+			}
+			//小于最小检测电流视为0A
+			if (measured_currents[i] < CURRENT_THRESHOLD)
+			{
+				measured_currents[i] = 0.0;
+			}
+		}
+		//至此，电压采样计算出采样电阻的电流值，电流采样计算出电流传感器的电流值
+		
+		//电压三相四线
+		if (volt_conn_type==0)
+		{
+			//Ua = Ia*(Rs+Rn) + Rn*(Ia + Ib + Ic)
+			struct Phasor Ua, Ub, Uc;
+			struct Phasor Ia , Ib, Ic;
+			struct Phasor sum, tmp;
+			
+			Ia.gain = measured_volts[0];
+			Ia.phase = 0.0;
+			
+			Ib.gain = measured_volts[1];
+			Ib.phase = 2*PI/3;
+			
+			Ic.gain = measured_volts[2];
+			Ic.phase = -2*PI/3;
+			
+			phasor_add(&Ia, &Ib, &sum);
+			phasor_add(&Ic, &sum, &sum);
+			
+			sum.gain = sum.gain * VOLTAGE_LIMIT_RES; //Rn*(Ia + Ib + Ic)
+			
+			phasor_mult_scalar(&Ia, VOLTAGE_SAMPLE_RES + VOLTAGE_LIMIT_RES, &tmp);//Ia*(Rs+Rn)
+			phasor_add(&tmp, &sum, &Ua);
+			
+			phasor_mult_scalar(&Ib, VOLTAGE_SAMPLE_RES + VOLTAGE_LIMIT_RES, &tmp);//Ib*(Rs+Rn)
+			phasor_add(&tmp, &sum, &Ub);
+			
+			phasor_mult_scalar(&Ic, VOLTAGE_SAMPLE_RES + VOLTAGE_LIMIT_RES, &tmp);//Ic*(Rs+Rn)
+			phasor_add(&tmp, &sum, &Uc);
+			
+			measured_volts[0] = Ua.gain;
+			measured_volts[1] = Ub.gain;
+			measured_volts[2] = Uc.gain;
+		}
+		else
+		{
+			//Uab = Ia*(Rn+Rs)+(Ia+Ic)*Rn
+			struct Phasor Uab, Ubc, Uca;
+			struct Phasor Iab , Ibc, Ica;
+			struct Phasor sum, tmp;
+			
+			Iab.gain = measured_volts[0];
+			Iab.phase = 0.0;
+			
+			Ibc.gain = measured_volts[2];
+			Ibc.phase = 2*PI/3;
+			
+			phasor_add(&Iab, &Ibc, &sum);
+			sum.gain = sum.gain * VOLTAGE_LIMIT_RES;
+			
+			phasor_mult_scalar(&Iab, VOLTAGE_SAMPLE_RES + VOLTAGE_LIMIT_RES, &tmp);
+			phasor_add(&tmp, &sum, &Uab);
+			
+			phasor_mult_scalar(&Ibc, VOLTAGE_SAMPLE_RES + VOLTAGE_LIMIT_RES, &tmp);
+			phasor_add(&tmp, &sum, &Ubc);
+			
+			phasor_add(&Uab, &Ubc, &Uca);//此处计算结果相位差180度，实际是Uac，只取模值不影响结果
+			
+			measured_volts[0] = Uab.gain;
+			measured_volts[1] = Ubc.gain;
+			measured_volts[2] = Uca.gain;
+			
+		}
+		
+		//电流三相四线
+		if (current_conn_type==0)
+		{
+			//无须处理
+		}
+		else
+		{
+			//Ib = -(Ia + Ic)
+			struct Phasor Ia , Ib, Ic;
+			Ia.gain = measured_currents[0];
+			Ia.phase = 0.0;
+			
+			Ic.gain = measured_currents[2];
+			Ic.phase = -2*PI/3;
+			
+			phasor_add(&Ia, &Ic, &Ib);
+			measured_currents[1] = Ib.gain;
 		}
 		
 		memset(acc_volts, 0, 3*sizeof(uint64_t));

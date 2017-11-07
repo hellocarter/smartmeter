@@ -2,6 +2,7 @@
 #include "modbus.h"
 
 #define PAGE_ADDR 0x08010000
+
 const uint16_t FLASH_NUM = 7;
 
 //波特率
@@ -12,18 +13,27 @@ const int16_t ADDR_MAX=247;
 const uint16_t REG_NUM = 32;
 uint8_t* regs[REG_NUM];
 
+const float VOLT_THRESHOLD = 0.0;
+const float CURRENT_THRESHOLD = 0.05;
 
-//电压或者电流,1电压，0电流
+//电压或者电流,0电流,1电压
 uint8_t show_flag;
+
+//电压接法,0-三相四线,1-三相三线
+int8_t volt_conn_type;
+
+//电流接法,0-三相四线,1-三相三线
+int8_t current_conn_type;
+
 int16_t volt_ratio;
 int16_t current_ratio;
 int8_t baud_index;
 int16_t com_addr;
 
-uint8_t io_in1;
-uint8_t io_in2;
-uint8_t io_out1;
-uint8_t io_out2;
+int8_t io_in1;
+int8_t io_in2;
+int8_t io_out1;
+int8_t io_out2;
 
 //校准值
 uint16_t calibration;
@@ -178,4 +188,9 @@ static void configs_read(int16_t* buf)
 	MemReadByte(buf,FLASH_NUM);
 }
 
+//y = 0.0507x^2 + 0.8194x + 0.1611
+float current_calibration(float x)
+{
+	return 0.0507*x*x + 0.8194*x + 0.1611;
+}
 

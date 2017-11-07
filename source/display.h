@@ -7,7 +7,7 @@ extern unsigned char KEY_SET;
 extern unsigned char KEY_ENTER;
 
 void display_init(void);
-void display_voltmeter(uint16_t *volts,uint8_t *dots);
+//void display_voltmeter(uint16_t *volts,uint8_t *dots);
 void display_getkeys(void);
 
 void display_menu0(uint8_t is_volt);

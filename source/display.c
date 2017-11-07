@@ -34,8 +34,6 @@ static s_dotnum st_volt[3];
 //三相电流
 static s_dotnum st_current[3];
 
-static const float THRESHOLD = 0.01;
-
 void display_init(void)
 {
 	TM1629C_Init();
@@ -266,10 +264,6 @@ void display_set_volts(float *volts)
 	char i;
 	for(i=0;i<3;i++)
 	{
-		if (volts[2-i] < THRESHOLD)
-		{
-			volts[2-i] = 0.0;
-		}
 		convert(volts[2-i]*volt_ratio,st_volt+i);
 	}	
 }
@@ -278,10 +272,6 @@ void display_set_currents(float *currents)
 	char i;
 	for(i=0;i<3;i++)
 	{
-		if (currents[2-i] < THRESHOLD)
-		{
-			currents[2-i] = 0.0;
-		}
 		convert(currents[2-i]*current_ratio,st_current+i);
 	}	
 }
