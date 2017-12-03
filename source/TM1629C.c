@@ -10,7 +10,7 @@
 
 static const int WAITTIME = 1;
 
-void delay_us(vu32 nCount)
+static void delay_us(vu32 nCount)
 {
 	vu32 i;
 	while(nCount--){
@@ -18,7 +18,7 @@ void delay_us(vu32 nCount)
 		while(i--);
 	}
 }
-void Ports_Config(void)
+static void Ports_Config(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
   
@@ -29,7 +29,7 @@ void Ports_Config(void)
   GPIO_Init(GPIOC, &GPIO_InitStructure); 	
 	
 }
-void DIO_Input(void)
+static void DIO_Input(void)
 { 
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
@@ -38,7 +38,7 @@ void DIO_Input(void)
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
   GPIO_Init(GPIOC, &GPIO_InitStructure);
 }
-void DIO_Output(void)
+static void DIO_Output(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	
@@ -47,31 +47,31 @@ void DIO_Output(void)
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
   GPIO_Init(GPIOC, &GPIO_InitStructure);  	
 }
-void DIO_Set(void)
+static void DIO_Set(void)
 {
 	GPIOC->ODR|=DIO;
 }
-void DIO_Reset(void)
+static void DIO_Reset(void)
 {
 	GPIOC->ODR&=~DIO;
 }
-uint8_t DIO_Read(void)
+static uint8_t DIO_Read(void)
 {
 	return GPIO_ReadInputDataBit(GPIOC,DIO);
 }
-void CLK_Set(void)
+static void CLK_Set(void)
 {
 	GPIOC->ODR|=CLK;
 }
-void CLK_Reset(void)
+static void CLK_Reset(void)
 {
 	GPIOC->ODR&=~CLK;
 }
-void STB_Set(void)
+static void STB_Set(void)
 {
 	GPIOC->ODR|=STB;
 }
-void STB_Reset(void)
+static void STB_Reset(void)
 {
 	GPIOC->ODR&=~STB;
 }

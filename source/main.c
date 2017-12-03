@@ -42,6 +42,7 @@ int main(){
 				display_getkeys();
 			}
 			menu_flag++;
+			display_clear();
 			if(menu_flag>DISP_MAX)
 			{
 				menu_flag=0;
@@ -49,26 +50,32 @@ int main(){
 		}
 		switch (menu_flag){
 			case 0:
-				display_menu0(show_flag);
+				display_show_voltage(volt_conn_type);
+				//菜单循环后自动保存设置
 				if(menu_flag_last!=0)
 				{
 					configs_save();
 				}
 				break;
 			case 1:
-				display_menu1(show_flag);
+				//设置电流或电压
+				display_show_current();
 				break;
 			case 2:
-				display_menu2();
+				//设置电压变比
+				display_voltage_ratio();
 				break;
 			case 3:
-				display_menu3();
+				//设置电流变比
+				display_current_ratio();
 				break;
 			case 4:
-				display_menu4();
+				//设置波特率
+				display_baudrate();
 				break;
 			case 5:
-				display_menu5();
+				//设置通讯地址
+				display_com_addr();
 				break;
 		}
 		if(menu_flag>0)

@@ -1,6 +1,7 @@
 #include "display.h"
 #include "configs.h"
 #include "stdio.h"
+#include "string.h"
 /**
 	* 0:NA
 	* 1:上b-下c-sigma-中b-上a-var-中c-中a
@@ -8,12 +9,8 @@
 	* 3:DO-上V-k-M-DI-WH-上A-AL1
 	* 4-15:right->left,down->up
 	*/
-unsigned char menu0_buf[16];
-unsigned char menu1_buf[16];
-unsigned char menu2_buf[16];
-unsigned char menu3_buf[16];
-unsigned char menu4_buf[16];
-unsigned char menu5_buf[16];
+//显存
+unsigned char disp_buf[16];
 
 const unsigned char NUM_TAB[16]={0x5f,0x05,0xd9,0x9d,0x87,0x9e,0xde,0x15,0xdf,0x9f,0xd7,0xce,0x5a,0xcd,0xda,0xd2};
 const unsigned char ADD_DOT=0x20;
@@ -34,6 +31,7 @@ static s_dotnum st_volt[3];
 //三相电流
 static s_dotnum st_current[3];
 
+//初始化显示设备
 void display_init(void)
 {
 	TM1629C_Init();
@@ -65,50 +63,25 @@ static void display_refresh(uint8_t *disp_buf)
 	}
 	TM1629C_Refresh(buf);
 }
+
+//清空本地缓存及显示驱动缓存
 void display_clear(void)
 {
+  memset(disp_buf,0,16);
+	display_refresh(disp_buf);
+}
 
-}
-//显示电流
-void show_current()
+//显示电压，mode:0三相四线，1三相三线
+void display_show_voltage(char conn_mode)
 {
 	int i;
+	display_set_volts(measured_volts);
 	for(i=0;i<3;i++)
 	{
-		menu0_buf[i*4+4] = NUM_TAB[st_current[i].number%10];
-		menu0_buf[i*4+1+4]= NUM_TAB[(st_current[i].number/10)%10];
-		menu0_buf[i*4+2+4]= NUM_TAB[(st_current[i].number/100)%10];
-		menu0_buf[i*4+3+4]= NUM_TAB[(st_current[i].number/1000)%10];
-	}
-	for(i=0;i<3;i++)
-	{
-		if(st_current[i].dot>3)
-		{
-			st_current[i].dot=3;
-		}
-		if(st_current[i].dot>0){
-			menu0_buf[i*4+st_current[i].dot+4]|=ADD_DOT;
-		}
-		
-	}
-	//show phase a b c
-	menu0_buf[0]=0x00;
-	menu0_buf[1]=0x1a;
-	menu0_buf[2]=0x41;
-	menu0_buf[3]=0x40;
-	
-	display_refresh(menu0_buf);
-}
-//显示电压
-void show_voltage()
-{
-	int i;
-	for(i=0;i<3;i++)
-	{
-		menu0_buf[i*4+4] = NUM_TAB[st_volt[i].number%10];
-		menu0_buf[i*4+1+4]= NUM_TAB[(st_volt[i].number/10)%10];
-		menu0_buf[i*4+2+4]= NUM_TAB[(st_volt[i].number/100)%10];
-		menu0_buf[i*4+3+4]= NUM_TAB[(st_volt[i].number/1000)%10];
+		disp_buf[i*4+4] = NUM_TAB[st_volt[i].number%10];
+		disp_buf[i*4+1+4]= NUM_TAB[(st_volt[i].number/10)%10];
+		disp_buf[i*4+2+4]= NUM_TAB[(st_volt[i].number/100)%10];
+		disp_buf[i*4+3+4]= NUM_TAB[(st_volt[i].number/1000)%10];
 	}
 	for(i=0;i<3;i++)
 	{
@@ -117,97 +90,107 @@ void show_voltage()
 			st_volt[i].dot=3;
 		}
 		if(st_volt[i].dot>0){
-			menu0_buf[i*4+st_volt[i].dot+4]|=ADD_DOT;
+			disp_buf[i*4+st_volt[i].dot+4]|=ADD_DOT;
 		}
 		
 	}
-	//show phase a b c
-	menu0_buf[0]=0x00;
-	menu0_buf[1]=0x1a;
-	menu0_buf[2]=0x12;
-	menu0_buf[3]=0x02;
+	disp_buf[0]=0x00;
+	if (conn_mode)
+	{
+		//show line ab bc ca
+		disp_buf[1]=0x1a|0xc3;
+	}
+	else
+	{
+		//show phase a b c
+		disp_buf[1]=0x1a;
+	}
+	disp_buf[2]=0x12;
+	disp_buf[3]=0x02;
 	
-	display_refresh(menu0_buf);
+	display_refresh(disp_buf);
 }
-//显示测量值
-void display_menu0(uint8_t is_volt)
+
+//显示电流
+void display_show_current()
 {
-	if(is_volt)
+	int i;
+	display_set_currents(measured_currents);
+	for(i=0;i<3;i++)
 	{
-		display_set_volts(measured_volts);
-		show_voltage();
+		disp_buf[i*4+4] = NUM_TAB[st_current[i].number%10];
+		disp_buf[i*4+1+4]= NUM_TAB[(st_current[i].number/10)%10];
+		disp_buf[i*4+2+4]= NUM_TAB[(st_current[i].number/100)%10];
+		disp_buf[i*4+3+4]= NUM_TAB[(st_current[i].number/1000)%10];
 	}
-	else
+	for(i=0;i<3;i++)
 	{
-		display_set_currents(measured_currents);
-		show_current();
+		if(st_current[i].dot>3)
+		{
+			st_current[i].dot=3;
+		}
+		if(st_current[i].dot>0){
+			disp_buf[i*4+st_current[i].dot+4]|=ADD_DOT;
+		}
 	}
+		
+	disp_buf[0]=0x00;
+	disp_buf[1]=0x1a;
+	disp_buf[2]=0x41;
+	disp_buf[3]=0x40;
+	
+	display_refresh(disp_buf);
 }
-//menu1:设置电流电压
-//disp,A,U
-void display_menu1(uint8_t is_volt)
-{
-	menu1_buf[15]=NUM_TAB[0x0d];
-	menu1_buf[14]=NUM_TAB[1];
-	menu1_buf[13]=NUM_TAB[5];
-	menu1_buf[12]=CHAR_P;
-	if(is_volt)
-	{
-		menu1_buf[8]=CHAR_U;
-	}
-	else
-	{
-		menu1_buf[8]=NUM_TAB[0x0a];
-	}
-	display_refresh(menu1_buf);
-}
+
 //menu2:设置电压变比
-void display_menu2()
+void display_voltage_ratio()
 {
-	menu2_buf[15]=CHAR_P;
-	menu2_buf[14]=CHAR_T;
-	menu2_buf[11]=NUM_TAB[volt_ratio/1000];
-	menu2_buf[10]=NUM_TAB[volt_ratio/100%10];
-	menu2_buf[9]=NUM_TAB[volt_ratio/10%10];
-	menu2_buf[8]=NUM_TAB[volt_ratio%10];
-	display_refresh(menu2_buf);
+	disp_buf[15]=CHAR_P;
+	disp_buf[14]=CHAR_T;
+	disp_buf[11]=NUM_TAB[volt_ratio/1000];
+	disp_buf[10]=NUM_TAB[volt_ratio/100%10];
+	disp_buf[9]=NUM_TAB[volt_ratio/10%10];
+	disp_buf[8]=NUM_TAB[volt_ratio%10];
+	display_refresh(disp_buf);
 }
+
 //menu3:设置电流变比
-void display_menu3()
+void display_current_ratio()
 {
-	menu3_buf[15]=NUM_TAB[0x0c];
-	menu3_buf[14]=CHAR_T;
-	menu3_buf[11]=NUM_TAB[current_ratio/1000];
-	menu3_buf[10]=NUM_TAB[current_ratio/100%10];
-	menu3_buf[9]=NUM_TAB[current_ratio/10%10];
-	menu3_buf[8]=NUM_TAB[current_ratio%10];
-	display_refresh(menu3_buf);
+	disp_buf[15]=NUM_TAB[0x0c];
+	disp_buf[14]=CHAR_T;
+	disp_buf[11]=NUM_TAB[current_ratio/1000];
+	disp_buf[10]=NUM_TAB[current_ratio/100%10];
+	disp_buf[9]=NUM_TAB[current_ratio/10%10];
+	disp_buf[8]=NUM_TAB[current_ratio%10];
+	display_refresh(disp_buf);
 }
+
 //menu4:设置波特率
-void display_menu4()
+void display_baudrate()
 {
-	menu4_buf[15]=NUM_TAB[0x0b];
-	menu4_buf[14]=NUM_TAB[0x0a];
-	menu4_buf[13]=CHAR_U;
-	menu4_buf[12]=NUM_TAB[0x0d];
-	menu4_buf[11]=NUM_TAB[BAUD_TAB[baud_index]/1000];
-	menu4_buf[10]=NUM_TAB[BAUD_TAB[baud_index]/100%10];
-	menu4_buf[9]=NUM_TAB[BAUD_TAB[baud_index]/10%10];
-	menu4_buf[8]=NUM_TAB[BAUD_TAB[baud_index]%10];
-	display_refresh(menu4_buf);
+	disp_buf[15]=NUM_TAB[0x0b];
+	disp_buf[14]=NUM_TAB[0x0a];
+	disp_buf[13]=CHAR_U;
+	disp_buf[12]=NUM_TAB[0x0d];
+	disp_buf[11]=NUM_TAB[BAUD_TAB[baud_index]/1000];
+	disp_buf[10]=NUM_TAB[BAUD_TAB[baud_index]/100%10];
+	disp_buf[9]=NUM_TAB[BAUD_TAB[baud_index]/10%10];
+	disp_buf[8]=NUM_TAB[BAUD_TAB[baud_index]%10];
+	display_refresh(disp_buf);
 }
 //menu5:设置通讯地址
-void display_menu5()
+void display_com_addr()
 {
-	menu5_buf[15]=NUM_TAB[0x0a];
-	menu5_buf[14]=NUM_TAB[0x0d];
-	menu5_buf[13]=NUM_TAB[0x0d];
-	menu5_buf[12]=CHAR_R;
+	disp_buf[15]=NUM_TAB[0x0a];
+	disp_buf[14]=NUM_TAB[0x0d];
+	disp_buf[13]=NUM_TAB[0x0d];
+	disp_buf[12]=CHAR_R;
 	
-	menu5_buf[10]=NUM_TAB[com_addr/100%10];
-	menu5_buf[9]=NUM_TAB[com_addr/10%10];
-	menu5_buf[8]=NUM_TAB[com_addr%10];
-	display_refresh(menu5_buf);
+	disp_buf[10]=NUM_TAB[com_addr/100%10];
+	disp_buf[9]=NUM_TAB[com_addr/10%10];
+	disp_buf[8]=NUM_TAB[com_addr%10];
+	display_refresh(disp_buf);
 }
 
 void display_getkeys()
@@ -220,6 +203,7 @@ void display_getkeys()
 	KEY_ENTER=buf[1]&0x0f;
 }
 
+//浮点数转显示结构体
 static void convert(float v,s_dotnum *st)
 {
 	uint16_t big_part;
@@ -259,6 +243,7 @@ static void convert(float v,s_dotnum *st)
 	st->dot = dot;
 	
 }
+//设置电压显示值
 void display_set_volts(float *volts)
 {
 	char i;
@@ -267,6 +252,7 @@ void display_set_volts(float *volts)
 		convert(volts[2-i]*volt_ratio,st_volt+i);
 	}	
 }
+//设置电流显示值
 void display_set_currents(float *currents)
 {
 	char i;
