@@ -32,9 +32,10 @@ const uint16_t ADC_NUM = 7;
 const uint16_t MEASURE_CYCLES = 5000;
 const uint16_t UPDATE_CYCLES = 5000; // UPDATE_CYCLES mod MEASURE_CYCLES == 0
 
-static uint16_t last_adc[ADC_NUM];
-static uint64_t acc_currents[3];
-static uint64_t acc_volts[3];
+uint16_t last_adc[ADC_NUM];
+uint64_t acc_volts[3];
+uint64_t acc_currents[3];
+
 
 void measure_init()
 {
@@ -77,7 +78,7 @@ char measure_update()
 		for(i=0;i<3;i++)
 		{
 			//直接计算出采样电阻下电流值
-			measured_volts[i] = 1.41421*sqrt((float)acc_volts[i+3]/3/MEASURE_CYCLES)*VOLTAGE_RATIO;
+			measured_volts[i] = 1.41421*sqrt((float)acc_volts[i]/3/MEASURE_CYCLES)*VOLTAGE_RATIO;
 			
 			//直接计算出电流值
 			measured_currents[i] = 1.41421*sqrt((float)(acc_currents[i])/3/MEASURE_CYCLES)*CURRENT_RATIO;

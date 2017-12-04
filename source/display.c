@@ -14,7 +14,7 @@ unsigned char disp_buf[16];
 
 const unsigned char NUM_TAB[16]={0x5f,0x05,0xd9,0x9d,0x87,0x9e,0xde,0x15,0xdf,0x9f,0xd7,0xce,0x5a,0xcd,0xda,0xd2};
 const unsigned char ADD_DOT=0x20;
-const unsigned char CHAR_P=0xD3,CHAR_U=0x4f,CHAR_T=0xca,CHAR_R=0xc0;
+const unsigned char CHAR_P=0xD3,CHAR_U=0x4f,CHAR_T=0xca,CHAR_R=0xc0,CHAR_N=0x57;
 
 unsigned char KEY_LEFT=0;
 unsigned char KEY_RIGHT=0;
@@ -71,8 +71,8 @@ void display_clear(void)
 	display_refresh(disp_buf);
 }
 
-//显示电压，mode:0三相四线，1三相三线
-void display_show_voltage(char conn_mode)
+//显示电压
+void display_show_voltage()
 {
 	int i;
 	display_set_volts(measured_volts);
@@ -95,7 +95,7 @@ void display_show_voltage(char conn_mode)
 		
 	}
 	disp_buf[0]=0x00;
-	if (conn_mode)
+	if (volt_conn_type)
 	{
 		//show line ab bc ca
 		disp_buf[1]=0x1a|0xc3;
@@ -142,7 +142,7 @@ void display_show_current()
 	display_refresh(disp_buf);
 }
 
-//menu2:设置电压变比
+//设置电压变比
 void display_voltage_ratio()
 {
 	disp_buf[15]=CHAR_P;
@@ -154,7 +154,7 @@ void display_voltage_ratio()
 	display_refresh(disp_buf);
 }
 
-//menu3:设置电流变比
+//设置电流变比
 void display_current_ratio()
 {
 	disp_buf[15]=NUM_TAB[0x0c];
@@ -166,7 +166,45 @@ void display_current_ratio()
 	display_refresh(disp_buf);
 }
 
-//menu4:设置波特率
+//电压连接方式
+void display_volt_conn()
+{
+	disp_buf[15]=NUM_TAB[0x0c];
+	disp_buf[14]=NUM_TAB[0x0];
+	disp_buf[13]=CHAR_N;
+	disp_buf[12]=CHAR_N;
+	disp_buf[11]=CHAR_U;
+	if (volt_conn_type)
+	{
+		disp_buf[8]=NUM_TAB[0x03];
+	}
+	else
+	{
+		disp_buf[8]=NUM_TAB[0x04];
+	}
+	display_refresh(disp_buf);
+}
+
+//电流连接方式
+void display_current_conn()
+{
+	disp_buf[15]=NUM_TAB[0x0c];
+	disp_buf[14]=NUM_TAB[0x0];
+	disp_buf[13]=CHAR_N;
+	disp_buf[12]=CHAR_N;
+	disp_buf[11]=NUM_TAB[0x0a];
+	if (current_conn_type)
+	{
+		disp_buf[8]=NUM_TAB[0x03];
+	}
+	else
+	{
+		disp_buf[8]=NUM_TAB[0x04];
+	}
+	display_refresh(disp_buf);
+}
+
+//设置波特率
 void display_baudrate()
 {
 	disp_buf[15]=NUM_TAB[0x0b];
@@ -179,7 +217,7 @@ void display_baudrate()
 	disp_buf[8]=NUM_TAB[BAUD_TAB[baud_index]%10];
 	display_refresh(disp_buf);
 }
-//menu5:设置通讯地址
+//设置通讯地址
 void display_com_addr()
 {
 	disp_buf[15]=NUM_TAB[0x0a];

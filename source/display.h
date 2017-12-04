@@ -12,8 +12,11 @@ void display_getkeys(void);
 
 void display_clear(void);
 
-void display_show_voltage(char conn_mode);
-void display_show_current();
+void display_show_voltage(void);
+void display_show_current(void);
+
+void display_volt_conn(void);
+void display_current_conn(void);
 
 void display_voltage_ratio(void);
 void display_current_ratio(void);

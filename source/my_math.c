@@ -1,5 +1,7 @@
 #include "my_math.h"
 
+#define PI 3.14159265358979323846
+
 //复数相加
 void complex_add(struct Complex* cp1, struct Complex* cp2, struct Complex* result)
 {
@@ -19,6 +21,17 @@ void complex_to_phasor(struct Complex* cp, struct Phasor* ph)
 {
 	ph->gain = sqrt((cp->a)*(cp->a) + (cp->b)*(cp->b));
 	ph->phase = atan(cp->b/cp->a);
+	if (cp->a < 0)
+	{
+		if (cp->b > 0)
+		{
+			ph->phase = ph->phase + PI;
+		}
+		else
+		{
+			ph->phase = ph->phase - PI;
+		}
+	}
 }
 
 //相量相加

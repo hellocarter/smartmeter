@@ -20,10 +20,10 @@ const float CURRENT_THRESHOLD = 0.0;
 uint8_t show_flag;
 
 //电压接法,0-三相四线,1-三相三线
-int8_t volt_conn_type = 1;
+int8_t volt_conn_type = 0;
 
 //电流接法,0-三相四线,1-三相三线
-int8_t current_conn_type = 1;
+int8_t current_conn_type = 0;
 
 int16_t volt_ratio;
 int16_t current_ratio;
