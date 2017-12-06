@@ -26,16 +26,17 @@
 #define CURRENT_RATIO 5/1024
 
 //adc 通道数
-const uint16_t ADC_NUM = 7;
+#define ADC_NUM 7
 
 //检测更新周期(eg:100ms/1ms=100)
 const uint16_t MEASURE_CYCLES = 5000;
 const uint16_t UPDATE_CYCLES = 5000; // UPDATE_CYCLES mod MEASURE_CYCLES == 0
 
+uint16_t current_adc[ADC_NUM];
 uint16_t last_adc[ADC_NUM];
+
 uint64_t acc_volts[3];
 uint64_t acc_currents[3];
-
 
 void measure_init()
 {
@@ -46,7 +47,7 @@ void measure_init()
 static uint64_t fun(uint16_t curr, uint16_t last)
 {
 	uint64_t res;
-	curr = (uint32_t)curr*3096/ADC_Values[6];
+	curr = (uint32_t)curr*3096/current_adc[6];
 	res = (curr - last)*(curr - last) + 3*curr*last;
 	return res;
 }
@@ -63,10 +64,12 @@ char measure_update()
 	static uint16_t update_cnt = 0;
 	char update_flag=0;
 	
+	//从adc缓存拷贝到本地，避免单周期内采样变换，造成计算误差。
+	memcpy(current_adc, ADC_Values, ADC_NUM*sizeof(uint16_t));
 	for(i=0;i<3;i++)
 	{
-		acc_currents[i]+=fun(ADC_Values[i],last_adc[i]);
-		acc_volts[i]+=fun(ADC_Values[i+3],last_adc[i+3]);
+		acc_currents[i]+=fun(current_adc[i],last_adc[i]);
+		acc_volts[i]+=fun(current_adc[i+3],last_adc[i+3]);
 	}
 
 	measure_cnt++;
@@ -193,7 +196,7 @@ char measure_update()
 	}
 	
 	//save last values
-	memcpy(last_adc,ADC_Values,ADC_NUM);	
+	memcpy(last_adc,current_adc,ADC_NUM*sizeof(uint16_t));	
 	
 	return update_flag;
 }

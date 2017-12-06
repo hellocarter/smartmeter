@@ -92,7 +92,6 @@ void update_param()
 	//设置电压接法
 	if(disp_index==2){
 		if(KEY_LEFT||KEY_RIGHT){
-			
 			if(KEY_LEFT || KEY_RIGHT){
 				if(volt_conn_type){
 					volt_conn_type=0;
@@ -117,7 +116,6 @@ void update_param()
 	//设置电压变比
 	if(disp_index==3){
 		if(KEY_LEFT||KEY_RIGHT){
-			
 			if(KEY_LEFT || KEY_RIGHT){
 				if(current_conn_type){
 					current_conn_type=0;
@@ -142,7 +140,6 @@ void update_param()
 	//设置电流变比
 	if(disp_index==5){
 		if(KEY_LEFT||KEY_RIGHT){
-			
 			if(KEY_LEFT){
 				current_ratio++;
 				if(current_ratio>9999){
@@ -217,28 +214,11 @@ void update_param()
 		}
 	}
 }
-//更新测量值到显示值
-void measure_disp()
-{
-	if(show_flag)
-	{
-		//display_set_volts(convert_volts);
-	}
-	else
-	{
-		//display_set_currents(convert_currents);
-	}
-	
-}
 
 void SysTick_Handler(void)
 {
 	char is_update;		
 	is_update = measure_update();
-	//if(is_update)
-	//{
-		//measure_disp();
-	//}
 	time++;	
 	count_key++;
 	modbus_timer++;

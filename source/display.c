@@ -92,7 +92,6 @@ void display_show_voltage()
 		if(st_volt[i].dot>0){
 			disp_buf[i*4+st_volt[i].dot+4]|=ADD_DOT;
 		}
-		
 	}
 	disp_buf[0]=0x00;
 	if (volt_conn_type)
@@ -107,6 +106,17 @@ void display_show_voltage()
 	}
 	disp_buf[2]=0x12;
 	disp_buf[3]=0x02;
+	
+	//œ‘ æDI£¨DO
+	if (io_in1 || io_in2)
+	{
+		disp_buf[3]=disp_buf[3]|0x08;
+	}
+	
+	if (io_out1 || io_out2)
+	{
+		disp_buf[3]=disp_buf[3]|0x80;
+	}
 	
 	display_refresh(disp_buf);
 }
@@ -138,6 +148,17 @@ void display_show_current()
 	disp_buf[1]=0x1a;
 	disp_buf[2]=0x41;
 	disp_buf[3]=0x40;
+	
+	//œ‘ æDI£¨DO
+	if (io_in1 || io_in2)
+	{
+		disp_buf[3]=disp_buf[3]|0x08;
+	}
+	
+	if (io_out1 || io_out2)
+	{
+		disp_buf[3]=disp_buf[3]|0x80;
+	}
 	
 	display_refresh(disp_buf);
 }
