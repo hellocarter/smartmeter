@@ -1,7 +1,7 @@
 #include "configs.h"
 #include "modbus.h"
 
-#define PAGE_ADDR 0x08010000
+#define PAGE_ADDR 0x0801f000
 
 const uint16_t FLASH_NUM = 7;
 

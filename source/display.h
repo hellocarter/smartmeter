@@ -12,6 +12,7 @@ void display_getkeys(void);
 
 void display_clear(void);
 
+void display_show_measure(void);
 void display_show_voltage(void);
 void display_show_current(void);
 

@@ -65,10 +65,23 @@ static void display_refresh(uint8_t *disp_buf)
 }
 
 //清空本地缓存及显示驱动缓存
-void display_clear(void)
+void display_clear()
 {
   memset(disp_buf,0,16);
 	display_refresh(disp_buf);
+}
+
+//display page for volt or current
+void display_show_measure()
+{
+	if (show_flag == 0)
+	{
+		display_show_voltage();
+	}
+	else
+	{
+		display_show_current();
+	}
 }
 
 //显示电压
@@ -110,12 +123,12 @@ void display_show_voltage()
 	//显示DI，DO
 	if (io_in1 || io_in2)
 	{
-		disp_buf[3]=disp_buf[3]|0x08;
+		disp_buf[3]=disp_buf[3]|0x10;
 	}
 	
 	if (io_out1 || io_out2)
 	{
-		disp_buf[3]=disp_buf[3]|0x80;
+		disp_buf[3]=disp_buf[3]|0x01;
 	}
 	
 	display_refresh(disp_buf);

@@ -161,9 +161,8 @@ char measure_update()
 			measured_volts[0] = Uab.gain;
 			measured_volts[1] = Ubc.gain;
 			measured_volts[2] = Uca.gain;
-			
 		}
-		
+
 		//电流三相四线
 		if (current_conn_type==0)
 		{
