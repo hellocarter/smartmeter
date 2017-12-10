@@ -1,7 +1,6 @@
 #include "stm32f10x.h"
 
-//定义为电流表
-#define CURRENT_METER 
+#define ALARM_TYPE_NUM 7
 
 extern const float VOLT_THRESHOLD;
 extern const float CURRENT_THRESHOLD;
@@ -25,6 +24,12 @@ extern int8_t io_in1;
 extern int8_t io_in2;
 extern int8_t io_out1;
 extern int8_t io_out2;
+
+extern int8_t alarm_type1;
+extern int8_t alarm_type2;
+
+extern int16_t alarm_value1;
+extern int16_t alarm_value2;
 
 extern uint16_t calibration;
 

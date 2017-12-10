@@ -114,7 +114,8 @@ static void rx_process()
 		if (fun_code == 0x03)
 		{
 			start_addr = modbus_rx_buf[2]*256 + modbus_rx_buf[3];
-			len = modbus_rx_buf[4]*256 + modbus_rx_buf[5];
+			//length in "byte"
+			len = 2 * (modbus_rx_buf[4]*256 + modbus_rx_buf[5]);
 			if (start_addr + len > REG_NUM)
 			{
 				return;
@@ -133,7 +134,8 @@ static void rx_process()
 			modbus_tx_buf[4+len+1] = crc%256;
 			Uart_Write(modbus_tx_buf, 4+len+1+1);
 		}
-		if (fun_code == 0x05)
+		//remote DO
+		if (fun_code == 0x0f)
 		{
 			uint16_t addr = modbus_rx_buf[2] * 256 + modbus_rx_buf[3];
 			uint16_t value = modbus_rx_buf[4] * 256 + modbus_rx_buf[5];
@@ -147,6 +149,7 @@ static void rx_process()
 			}
 			Uart_Write(modbus_rx_buf, 8);
 		}
+		//sample calibration
 		if (fun_code == 0x06)
 		{
 			uint16_t addr = modbus_rx_buf[2] * 256 + modbus_rx_buf[3];

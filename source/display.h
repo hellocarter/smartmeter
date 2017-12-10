@@ -13,14 +13,15 @@ void display_getkeys(void);
 void display_clear(void);
 
 void display_show_measure(void);
-void display_show_voltage(void);
-void display_show_current(void);
 
-void display_volt_conn(void);
-void display_current_conn(void);
+void display_conn_type(void);
+void display_alarm_type(void);
 
 void display_voltage_ratio(void);
 void display_current_ratio(void);
+
+void display_alarm_value1(void);
+void display_alarm_value2(void);
 
 void display_baudrate(void);
 void display_com_addr(void);

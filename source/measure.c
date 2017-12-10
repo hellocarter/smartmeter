@@ -16,6 +16,9 @@
 //电压采样分压电阻150k
 #define VOLTAGE_LIMIT_RES 150000
 
+//为兼容缺相设置电压检测下最小采样电流
+#define VOLTAGE_LEAST_CURRENT 4.0e-6
+
 //电流传感器变比
 #define CT_RATIO 2000
 
@@ -27,6 +30,14 @@
 
 //adc 通道数
 #define ADC_NUM 7
+
+//最小检测显示电压
+#define MEASURE_MIN_VOLTAGE 1
+
+//最小检测显示电流
+#define MEASURE_MIN_CURRENT 0.05
+
+
 
 //检测更新周期(eg:100ms/1ms=100)
 const uint16_t MEASURE_CYCLES = 5000;
@@ -103,9 +114,9 @@ char measure_update()
 		if (volt_conn_type==0)
 		{
 			//Ua = Ia*(Rs+Rn) + Rn*(Ia + Ib + Ic)
-			struct Phasor Ua, Ub, Uc;
-			struct Phasor Ia , Ib, Ic;
-			struct Phasor sum, tmp;
+			struct Phasor Ua={0.0, 0.0}, Ub={0.0, 0.0}, Uc={0.0, 0.0};
+			struct Phasor Ia={0.0, 0.0} , Ib={0.0, 0.0}, Ic={0.0, 0.0};
+			struct Phasor sum={0.0, 0.0}, tmp={0.0, 0.0};
 			
 			Ia.gain = measured_volts[0];
 			Ia.phase = 0.0;
@@ -122,13 +133,24 @@ char measure_update()
 			sum.gain = sum.gain * VOLTAGE_LIMIT_RES; //Rn*(Ia + Ib + Ic)
 			
 			phasor_mult_scalar(&Ia, VOLTAGE_SAMPLE_RES + VOLTAGE_LIMIT_RES, &tmp);//Ia*(Rs+Rn)
-			phasor_add(&tmp, &sum, &Ua);
+			
+			//兼容缺相
+			if (measured_volts[0]>VOLTAGE_LEAST_CURRENT)
+			{
+				phasor_add(&tmp, &sum, &Ua);
+			}
 			
 			phasor_mult_scalar(&Ib, VOLTAGE_SAMPLE_RES + VOLTAGE_LIMIT_RES, &tmp);//Ib*(Rs+Rn)
-			phasor_add(&tmp, &sum, &Ub);
+			if (measured_volts[1]>VOLTAGE_LEAST_CURRENT)
+			{
+				phasor_add(&tmp, &sum, &Ub);
+			}
 			
 			phasor_mult_scalar(&Ic, VOLTAGE_SAMPLE_RES + VOLTAGE_LIMIT_RES, &tmp);//Ic*(Rs+Rn)
-			phasor_add(&tmp, &sum, &Uc);
+			if (measured_volts[2]>VOLTAGE_LEAST_CURRENT)
+			{
+				phasor_add(&tmp, &sum, &Uc);
+			}
 			
 			measured_volts[0] = Ua.gain;
 			measured_volts[1] = Ub.gain;
@@ -181,6 +203,14 @@ char measure_update()
 			phasor_add(&Ia, &Ic, &Ib);
 			measured_currents[1] = Ib.gain;
 		}
+		
+		measured_volts[0] = measured_volts[0]>MEASURE_MIN_VOLTAGE?measured_volts[0]:0.0;
+		measured_volts[1] = measured_volts[1]>MEASURE_MIN_VOLTAGE?measured_volts[1]:0.0;
+		measured_volts[2] = measured_volts[2]>MEASURE_MIN_VOLTAGE?measured_volts[2]:0.0;
+	
+		measured_currents[0]=measured_currents[0]>MEASURE_MIN_VOLTAGE?measured_currents[0]:0.0;
+		measured_currents[1]=measured_currents[1]>MEASURE_MIN_VOLTAGE?measured_currents[1]:0.0;
+		measured_currents[2]=measured_currents[2]>MEASURE_MIN_VOLTAGE?measured_currents[2]:0.0;
 		
 		memset(acc_volts, 0, 3*sizeof(uint64_t));
 		memset(acc_currents, 0, 3*sizeof(uint64_t));

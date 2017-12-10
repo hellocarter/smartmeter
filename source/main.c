@@ -13,26 +13,28 @@ uint8_t fast_key=0;
 
 const uint16_t FAST_KEY_DELAY = 250;
 
-//页面序号
+//page index
 uint8_t disp_index=0;
 uint8_t disp_index_last=0;
 
-//总页面数量
-const uint8_t DISP_NUM = 7;
+//total pages
+const uint8_t DISP_NUM = 9;
 
 //function array for display
-void (*disp_fun[DISP_NUM])(void) = {display_show_measure, display_volt_conn,
-display_current_conn, display_voltage_ratio, display_current_ratio, display_baudrate, display_com_addr};
+void (*disp_fun[DISP_NUM])(void) = {display_show_measure, display_conn_type,
+display_alarm_type,display_alarm_value1,display_alarm_value2, display_voltage_ratio, display_current_ratio,display_baudrate, display_com_addr};
 
 void update_param(void);
-
+uint16_t test = 0x1234;
+uint8_t * ptr = (uint8_t*)&test;
+uint8_t res = 0;
 int main(){
 	
 	SysTick_Config(SystemCoreClock  / 5000);	
 	
 	//delay for device init
 	while(time<500);
-
+res = *ptr;
 	display_init();
 	measure_init();
 	load_configs();
@@ -56,27 +58,17 @@ int main(){
 			}			
 		}
 		
-		//根据显示页面序号调用显示函数
+		//call display function by page index
 		disp_fun[disp_index]();
 		
-		//菜单循环后自动保存设置
+		//save configs after page loop
 		if(disp_index_last != 0 && disp_index == 0)
 		{
 			configs_save();
 		}
 		
-		
 		update_param();
-		if(KEY_ENTER)
-		{
-			while(KEY_ENTER)
-			{
-				display_getkeys();
-			}
-			configs_save();
-			disp_index=0;
-		}
-
+		
 		if(!(KEY_SET||KEY_ENTER||KEY_LEFT||KEY_RIGHT))
 		{
 			fast_key=0;
@@ -88,6 +80,7 @@ int main(){
 	return 0;
 }
 
+//update params by key events
 void update_param()
 {
 	//set volt or current with left and right
@@ -116,15 +109,24 @@ void update_param()
 		}
 	}
 	
-	//设置电压接法
-	if(disp_fun[disp_index] == display_volt_conn){
+	//set connect type
+	if(disp_fun[disp_index] == display_conn_type){
 		if(KEY_LEFT||KEY_RIGHT){
-			if(KEY_LEFT || KEY_RIGHT){
+			if(KEY_LEFT){
 				if(volt_conn_type){
 					volt_conn_type=0;
 				}
 				else{
 					volt_conn_type=1;
+				}
+			}
+			if (KEY_RIGHT)
+			{
+				if(current_conn_type){
+					current_conn_type=0;
+				}
+				else{
+					current_conn_type=1;
 				}
 			}
 			count_key=0;
@@ -141,15 +143,77 @@ void update_param()
 		}
 	}
 	
-	//set current connect type
-	if(disp_fun[disp_index] == display_current_conn){
+	//set alarm type
+	if(disp_fun[disp_index] == display_alarm_type){
 		if(KEY_LEFT||KEY_RIGHT){
-			if(KEY_LEFT || KEY_RIGHT){
-				if(current_conn_type){
-					current_conn_type=0;
+			if(KEY_LEFT){
+				alarm_type1++;
+				if(alarm_type1>=ALARM_TYPE_NUM){
+					alarm_type1=0;
 				}
-				else{
-					current_conn_type=1;
+			}
+			if (KEY_RIGHT)
+			{
+				alarm_type2++;
+				if(alarm_type2>=ALARM_TYPE_NUM){
+					alarm_type2=0;
+				}
+			}
+			count_key=0;
+			while(KEY_LEFT||KEY_RIGHT){
+				display_getkeys();
+				if(fast_key&&count_key>FAST_KEY_DELAY){
+					break;
+				}
+				if(count_key>FAST_KEY_DELAY*10){
+					fast_key=1;
+					break;
+				}
+			}
+		}
+	}
+	
+	//set alarm value1
+	if(disp_fun[disp_index] == display_alarm_value1){
+		if(KEY_LEFT||KEY_RIGHT){
+			if(KEY_LEFT){
+				alarm_value1++;
+				if(alarm_value1>100){
+					alarm_value1=0;
+				}
+			}
+			if(KEY_RIGHT){
+				alarm_value1--;
+				if(alarm_value1<0){
+					alarm_value1=100;
+				}
+			}
+			count_key=0;
+			while(KEY_LEFT||KEY_RIGHT){
+				display_getkeys();
+				if(fast_key&&count_key>FAST_KEY_DELAY){
+					break;
+				}
+				if(count_key>FAST_KEY_DELAY*10){
+					fast_key=1;
+					break;
+				}
+			}
+		}
+	}
+	//set alarm value2
+	if(disp_fun[disp_index] == display_alarm_value2){
+		if(KEY_LEFT||KEY_RIGHT){
+			if(KEY_LEFT){
+				alarm_value2++;
+				if(alarm_value2>100){
+					alarm_value2=0;
+				}
+			}
+			if(KEY_RIGHT){
+				alarm_value2--;
+				if(alarm_value2<0){
+					alarm_value2=100;
 				}
 			}
 			count_key=0;
@@ -272,6 +336,17 @@ void update_param()
 				}
 			}
 		}
+	}
+	
+	//enter key for saving configuration
+	if(KEY_ENTER)
+	{
+		while(KEY_ENTER)
+		{
+			display_getkeys();
+		}
+		configs_save();
+		disp_index=0;
 	}
 }
 

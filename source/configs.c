@@ -3,7 +3,7 @@
 
 #define PAGE_ADDR 0x0801f000
 
-const uint16_t FLASH_NUM = 7;
+const uint16_t FLASH_NUM = 11;
 
 //波特率
 const uint8_t BAUD_NUM = 4;
@@ -35,6 +35,12 @@ int8_t io_in2;
 int8_t io_out1;
 int8_t io_out2;
 
+int8_t alarm_type1;
+int8_t alarm_type2;
+
+int16_t alarm_value1;
+int16_t alarm_value2;
+
 //校准值
 uint16_t calibration;
 
@@ -64,31 +70,30 @@ void map_register()
 {
 	uint16_t i;
 	
-	//regs[0] = &show_flag;
-	
 	regs[0] = (uint8_t*)&volt_ratio+1;
 	regs[1] = ((uint8_t*)&volt_ratio);
 	
 	regs[2] = (uint8_t*)&current_ratio+1;
 	regs[3] = ((uint8_t*)&current_ratio);
 	
-	regs[4] = (uint8_t*)&(BAUD_TAB[baud_index])+1;
-	regs[5] = (uint8_t*)&(BAUD_TAB[baud_index]);
-	
-	regs[6] = (uint8_t*)&com_addr+1;
-	regs[7] = ((uint8_t*)&com_addr);
-	
-	//volts: reg8~19
+	//volts: reg4~15
 	for(i=0;i<12;i++)
 	{
-		regs[8+i] = ((uint8_t*)measured_volts)+(12-i-1);
+		regs[4+i] = ((uint8_t*)measured_volts)+(12-i-1);
 	}
 	
-	//currents: reg20~31 
+	//currents: reg16~27
 	for(i=0;i<12;i++)
 	{
-		regs[20+i] = ((uint8_t*)measured_currents)+(12-i-1);
+		regs[16+i] = ((uint8_t*)measured_currents)+(12-i-1);
 	}
+	//DI: reg28~29
+	regs[28] =  (uint8_t*)&io_in1;
+	regs[29] =  (uint8_t*)&io_in2;
+	
+	//DO: reg30~31
+	regs[30] =  (uint8_t*)&io_out1;
+	regs[31] =  (uint8_t*)&io_out2;
 }
 
 void configs_save()
@@ -101,6 +106,10 @@ void configs_save()
 	buf[4] = baud_index;
 	buf[5] = com_addr;
 	buf[6] = calibration;
+	buf[7] = alarm_type1;
+	buf[8] = alarm_type2;
+	buf[9] = alarm_value1;
+	buf[10] = alarm_value2;
 	
 	MemWriteByte(buf,FLASH_NUM);
 	modbus_init(BAUD_TAB[baud_index]);
@@ -123,6 +132,10 @@ void load_configs()
 		baud_index = config_paras[4];
 		com_addr = config_paras[5];
 		calibration = (uint16_t)config_paras[6];
+		alarm_type1 = config_paras[7];
+		alarm_type2 = config_paras[8];
+		alarm_value1 = config_paras[9];
+		alarm_value2 = config_paras[10];
 		
 		modbus_init(BAUD_TAB[baud_index]);
 	}
@@ -136,6 +149,10 @@ void load_configs()
 		
 		//2.495v对应ad值
 		calibration = 3096;
+		alarm_type1 = 0;
+		alarm_type2 = 0;
+		alarm_value1 = 0;
+		alarm_value2 = 0;
 		configs_save();
 	}
 	

@@ -14,12 +14,15 @@ unsigned char disp_buf[16];
 
 const unsigned char NUM_TAB[16]={0x5f,0x05,0xd9,0x9d,0x87,0x9e,0xde,0x15,0xdf,0x9f,0xd7,0xce,0x5a,0xcd,0xda,0xd2};
 const unsigned char ADD_DOT=0x20;
-const unsigned char CHAR_P=0xD3,CHAR_U=0x4f,CHAR_T=0xca,CHAR_R=0xc0,CHAR_N=0x57;
+const unsigned char CHAR_P=0xD3,CHAR_U=0x4f,CHAR_u=0x4c,CHAR_T=0xca,CHAR_R=0xc0,CHAR_N=0x57,CHAR_O=0xcc,CHAR_L=0x4a,CHAR_H=0xc7,CHAR_BAR=0x80;
 
 unsigned char KEY_LEFT=0;
 unsigned char KEY_RIGHT=0;
 unsigned char KEY_SET=0;
 unsigned char KEY_ENTER=0;
+
+//-,aL,bL,cL,aH,bH,cH
+const uint16_t TYPE_TAB[ALARM_TYPE_NUM] = {0x0080,0xd74a,0xce4a,0x5a4a,0xd7c7,0xcec7,0x5ac7};
 
 typedef struct{
 	uint16_t number;
@@ -69,19 +72,6 @@ void display_clear()
 {
   memset(disp_buf,0,16);
 	display_refresh(disp_buf);
-}
-
-//display page for volt or current
-void display_show_measure()
-{
-	if (show_flag == 0)
-	{
-		display_show_voltage();
-	}
-	else
-	{
-		display_show_current();
-	}
 }
 
 //显示电压
@@ -176,6 +166,19 @@ void display_show_current()
 	display_refresh(disp_buf);
 }
 
+//display page for volt or current
+void display_show_measure()
+{
+	if (show_flag == 0)
+	{
+		display_show_voltage();
+	}
+	else
+	{
+		display_show_current();
+	}
+}
+
 //设置电压变比
 void display_voltage_ratio()
 {
@@ -201,12 +204,14 @@ void display_current_ratio()
 }
 
 //电压连接方式
-void display_volt_conn()
+void display_conn_type()
 {
 	disp_buf[15]=NUM_TAB[0x0c];
 	disp_buf[14]=NUM_TAB[0x0];
 	disp_buf[13]=CHAR_N;
 	disp_buf[12]=CHAR_N;
+	
+	//set for volt
 	disp_buf[11]=CHAR_U;
 	if (volt_conn_type)
 	{
@@ -216,25 +221,70 @@ void display_volt_conn()
 	{
 		disp_buf[8]=NUM_TAB[0x04];
 	}
-	display_refresh(disp_buf);
-}
-
-//电流连接方式
-void display_current_conn()
-{
-	disp_buf[15]=NUM_TAB[0x0c];
-	disp_buf[14]=NUM_TAB[0x0];
-	disp_buf[13]=CHAR_N;
-	disp_buf[12]=CHAR_N;
-	disp_buf[11]=NUM_TAB[0x0a];
+	
+	//set for current
+	disp_buf[7]=NUM_TAB[0x0a];
 	if (current_conn_type)
 	{
-		disp_buf[8]=NUM_TAB[0x03];
+		disp_buf[4]=NUM_TAB[0x03];
 	}
 	else
 	{
-		disp_buf[8]=NUM_TAB[0x04];
+		disp_buf[4]=NUM_TAB[0x04];
 	}
+	display_refresh(disp_buf);
+}
+
+//报警输出类型
+void display_alarm_type()
+{
+	disp_buf[15]=CHAR_O;
+	disp_buf[14]=CHAR_u;
+	disp_buf[13]=CHAR_T;
+	disp_buf[12]=0;
+	
+	//set for o1
+	disp_buf[11]=NUM_TAB[0x01];
+	disp_buf[9] = TYPE_TAB[alarm_type1]>>8;
+	disp_buf[8] = TYPE_TAB[alarm_type1];
+	
+	//set for o2
+	disp_buf[7]=NUM_TAB[0x02];
+	disp_buf[5]=TYPE_TAB[alarm_type2]>>8;
+	disp_buf[4]=TYPE_TAB[alarm_type2];
+	
+	display_refresh(disp_buf);
+}
+
+//报警输出1
+void display_alarm_value1()
+{
+	disp_buf[15]=CHAR_O;
+	disp_buf[14]=NUM_TAB[0x01];
+	disp_buf[13]=0;
+	disp_buf[12]=0;
+	
+	disp_buf[11]=NUM_TAB[0x00];
+	disp_buf[10]=NUM_TAB[alarm_value1/100%10];
+	disp_buf[9]=NUM_TAB[alarm_value1/10%10];
+	disp_buf[8]=NUM_TAB[alarm_value1%10];
+	
+	display_refresh(disp_buf);
+}
+
+//报警输出2
+void display_alarm_value2()
+{
+	disp_buf[15]=CHAR_O;
+	disp_buf[14]=NUM_TAB[0x02];
+	disp_buf[13]=0;
+	disp_buf[12]=0;
+	
+	disp_buf[11]=NUM_TAB[0x00];
+	disp_buf[10]=NUM_TAB[alarm_value2/100%10];
+	disp_buf[9]=NUM_TAB[alarm_value2/10%10];
+	disp_buf[8]=NUM_TAB[alarm_value2%10];
+	
 	display_refresh(disp_buf);
 }
 
