@@ -2,8 +2,8 @@
 
 #define ALARM_TYPE_NUM 7
 
-extern const float VOLT_THRESHOLD;
-extern const float CURRENT_THRESHOLD;
+//extern const float VOLT_THRESHOLD;
+//extern const float CURRENT_THRESHOLD;
 
 //电压或者电流,1电压，0电流
 extern uint8_t show_flag;

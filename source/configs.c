@@ -13,8 +13,8 @@ const int16_t ADDR_MAX=247;
 const uint16_t REG_NUM = 32;
 uint8_t* regs[REG_NUM];
 
-const float VOLT_THRESHOLD = 0.0;
-const float CURRENT_THRESHOLD = 0.0;
+//const float VOLT_THRESHOLD = 0.0;
+//const float CURRENT_THRESHOLD = 0.0;
 
 //电压或者电流,0电流,1电压
 uint8_t show_flag;

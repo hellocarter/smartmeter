@@ -32,10 +32,10 @@
 #define ADC_NUM 7
 
 //最小检测显示电压
-#define MEASURE_MIN_VOLTAGE 1
+#define MEASURE_MIN_VOLTAGE 0 //5
 
 //最小检测显示电流
-#define MEASURE_MIN_CURRENT 0.05
+#define MEASURE_MIN_CURRENT 0.0 //0.05
 
 
 
@@ -97,16 +97,6 @@ char measure_update()
 			//直接计算出电流值
 			measured_currents[i] = 1.41421*sqrt((float)(acc_currents[i])/3/MEASURE_CYCLES)*CURRENT_RATIO;
 			
-			//小于最小检测电压视为0V
-			if (measured_volts[i] < VOLT_THRESHOLD)
-			{
-				measured_volts[i] = 0.0;
-			}
-			//小于最小检测电流视为0A
-			if (measured_currents[i] < CURRENT_THRESHOLD)
-			{
-				measured_currents[i] = 0.0;
-			}
 		}
 		//至此，电压采样计算出采样电阻的电流值，电流采样计算出电流传感器的电流值
 		
@@ -174,9 +164,11 @@ char measure_update()
 			
 			phasor_mult_scalar(&Iab, VOLTAGE_SAMPLE_RES + VOLTAGE_LIMIT_RES, &tmp);
 			phasor_add(&tmp, &sum, &Uab);
+			Uab.phase = 0.0;
 			
 			phasor_mult_scalar(&Ibc, VOLTAGE_SAMPLE_RES + VOLTAGE_LIMIT_RES, &tmp);
 			phasor_add(&tmp, &sum, &Ubc);
+			Ubc.phase = 2*PI/3;
 			
 			phasor_add(&Uab, &Ubc, &Uca);//此处计算结果相位差180度，实际是Uac，只取模值不影响结果
 			
@@ -208,9 +200,9 @@ char measure_update()
 		measured_volts[1] = measured_volts[1]>MEASURE_MIN_VOLTAGE?measured_volts[1]:0.0;
 		measured_volts[2] = measured_volts[2]>MEASURE_MIN_VOLTAGE?measured_volts[2]:0.0;
 	
-		measured_currents[0]=measured_currents[0]>MEASURE_MIN_VOLTAGE?measured_currents[0]:0.0;
-		measured_currents[1]=measured_currents[1]>MEASURE_MIN_VOLTAGE?measured_currents[1]:0.0;
-		measured_currents[2]=measured_currents[2]>MEASURE_MIN_VOLTAGE?measured_currents[2]:0.0;
+		measured_currents[0]=measured_currents[0]>MEASURE_MIN_CURRENT?measured_currents[0]:0.0;
+		measured_currents[1]=measured_currents[1]>MEASURE_MIN_CURRENT?measured_currents[1]:0.0;
+		measured_currents[2]=measured_currents[2]>MEASURE_MIN_CURRENT?measured_currents[2]:0.0;
 		
 		memset(acc_volts, 0, 3*sizeof(uint64_t));
 		memset(acc_currents, 0, 3*sizeof(uint64_t));

@@ -25,8 +25,6 @@ void (*disp_fun[DISP_NUM])(void) = {display_show_measure, display_conn_type,
 display_alarm_type,display_alarm_value1,display_alarm_value2, display_voltage_ratio, display_current_ratio,display_baudrate, display_com_addr};
 
 void update_param(void);
-uint16_t test = 0x1234;
-uint8_t * ptr = (uint8_t*)&test;
 uint8_t res = 0;
 int main(){
 	
@@ -34,7 +32,6 @@ int main(){
 	
 	//delay for device init
 	while(time<500);
-res = *ptr;
 	display_init();
 	measure_init();
 	load_configs();
