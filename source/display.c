@@ -74,6 +74,22 @@ void display_clear()
 	display_refresh(disp_buf);
 }
 
+//DO,DI,AL1,AL2等附加显示项
+static void display_additional()
+{
+	//DI
+	disp_buf[3] = (io_in1 || io_in2)? disp_buf[3]|0x10 : disp_buf[3];
+	
+	//DO
+	disp_buf[3] = (io_out1 || io_out2) ? disp_buf[3]|0x01 : disp_buf[3];
+	
+	//AL1
+	disp_buf[3] = alarm_AL1 ? disp_buf[3]|0x80 : disp_buf[3];
+	
+	//AL2
+	disp_buf[2] = alarm_AL2 ? disp_buf[2]|0x04 : disp_buf[2];
+}
+
 //显示电压
 void display_show_voltage()
 {
@@ -110,16 +126,7 @@ void display_show_voltage()
 	disp_buf[2]=0x12;
 	disp_buf[3]=0x02;
 	
-	//显示DI，DO
-	if (io_in1 || io_in2)
-	{
-		disp_buf[3]=disp_buf[3]|0x10;
-	}
-	
-	if (io_out1 || io_out2)
-	{
-		disp_buf[3]=disp_buf[3]|0x01;
-	}
+	display_additional();
 	
 	display_refresh(disp_buf);
 }
@@ -152,16 +159,7 @@ void display_show_current()
 	disp_buf[2]=0x41;
 	disp_buf[3]=0x40;
 	
-	//显示DI，DO
-	if (io_in1 || io_in2)
-	{
-		disp_buf[3]=disp_buf[3]|0x08;
-	}
-	
-	if (io_out1 || io_out2)
-	{
-		disp_buf[3]=disp_buf[3]|0x80;
-	}
+	display_additional();
 	
 	display_refresh(disp_buf);
 }

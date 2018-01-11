@@ -2,8 +2,7 @@
 
 #define ALARM_TYPE_NUM 7
 
-//extern const float VOLT_THRESHOLD;
-//extern const float CURRENT_THRESHOLD;
+extern const uint16_t REG_OFFSET;
 
 //电压或者电流,1电压，0电流
 extern uint8_t show_flag;
@@ -31,7 +30,8 @@ extern int8_t alarm_type2;
 extern int16_t alarm_value1;
 extern int16_t alarm_value2;
 
-extern uint16_t calibration;
+extern int8_t alarm_AL1;
+extern int8_t alarm_AL2;
 
 extern const uint8_t BAUD_NUM;
 extern const uint16_t BAUD_TAB[];
@@ -45,4 +45,16 @@ extern uint8_t* regs[];
 
 void configs_save(void);
 void load_configs(void);
+
+//电压校准值
+extern int16_t voltage_factor[3];
+
+//电流校准值
+extern int16_t current_factor[3];
+
+void voltage_calibration(float* voltages);
+void current_calibration(float* current);
+
+#define CALIBRATE_UPPER_LIMIT 1500
+#define CALIBRATE_LOWER_LIMIT 500
 

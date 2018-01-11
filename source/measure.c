@@ -8,7 +8,7 @@
 #define PI 3.14159265358979323846
 
 //电流采样电阻330
-#define CURRENT_SAMPLE_RES 330
+//#define CURRENT_SAMPLE_RES 330
 
 //电压采样电阻510
 #define VOLTAGE_SAMPLE_RES 510
@@ -27,17 +27,16 @@
 
 //实际电流<-->采样值:5A<-->2.5*0.33/3.3*4096，采样电阻330
 #define CURRENT_RATIO 5/1024
+//#define CURRENT_RATIO 5/2110  //680ohm
 
 //adc 通道数
 #define ADC_NUM 7
 
 //最小检测显示电压
-#define MEASURE_MIN_VOLTAGE 0 //5
+#define MEASURE_MIN_VOLTAGE 5 //5
 
 //最小检测显示电流
 #define MEASURE_MIN_CURRENT 0.0 //0.05
-
-
 
 //检测更新周期(eg:100ms/1ms=100)
 const uint16_t MEASURE_CYCLES = 5000;
@@ -195,6 +194,10 @@ char measure_update()
 			phasor_add(&Ia, &Ic, &Ib);
 			measured_currents[1] = Ib.gain;
 		}
+		
+		//calibrate voltage and current
+		voltage_calibration(measured_volts);
+		current_calibration(measured_currents);
 		
 		measured_volts[0] = measured_volts[0]>MEASURE_MIN_VOLTAGE?measured_volts[0]:0.0;
 		measured_volts[1] = measured_volts[1]>MEASURE_MIN_VOLTAGE?measured_volts[1]:0.0;

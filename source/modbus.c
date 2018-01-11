@@ -48,6 +48,8 @@ uint8_t modbus_tx_buf[64];
 static uint8_t rx_cnt = 0;
 uint16_t modbus_timer;
 
+const uint8_t FUN_CODE_TAB[] = {0x03,0x06,0x07,0x0f};
+
 union u_float
 {
 	float f_val;
@@ -92,6 +94,20 @@ static uint16_t calc_crc(unsigned char *q, char len)
 	}     
 	return ( uint16_t )( crc_high << 8 | crc_low );  
 }
+
+static uint8_t is_supported_code(uint8_t fun_code)
+{
+	uint8_t i;
+	for (i=0;i<sizeof(FUN_CODE_TAB) / sizeof(FUN_CODE_TAB[0]);i++)
+	{
+		if (FUN_CODE_TAB[i] == fun_code)
+		{
+			return 1;
+		}
+	}
+	return 0;
+}
+
 static void rx_process()
 {
 	uint16_t crc;
@@ -102,11 +118,12 @@ static void rx_process()
 	
 	rx_cnt = 0;
 	
-	//只识别3,5,6功能码
-	if (fun_code!= 0x03 && fun_code != 0x05 && fun_code != 0x06)
+	//只识别03,06,07,0f功能码,注7为非标准功能码，用作通过modbus读取reg偏置之内的特殊参数
+	if (!is_supported_code(fun_code ))
 	{
 		return;
 	}
+	
 	//请求数据帧8个字节，2个字节CRC
 	crc = calc_crc(modbus_rx_buf, 6);
 	if ((crc % 256 == modbus_rx_buf[7])&&(crc / 256 == modbus_rx_buf[6]))
@@ -116,13 +133,37 @@ static void rx_process()
 			start_addr = modbus_rx_buf[2]*256 + modbus_rx_buf[3];
 			//length in "byte"
 			len = 2 * (modbus_rx_buf[4]*256 + modbus_rx_buf[5]);
-			if (start_addr + len > REG_NUM)
+			if (start_addr + len > REG_NUM - REG_OFFSET)
 			{
 				return;
 			}
 			
 			modbus_tx_buf[0] = com_addr;
 			modbus_tx_buf[1] = 0x03;
+			modbus_tx_buf[2] = len/256;
+			modbus_tx_buf[3] = len%256;
+			for(i=0;i<len;i++)
+			{
+				modbus_tx_buf[4+i] = *(regs[start_addr+i - REG_OFFSET]);
+			}
+			crc = calc_crc(modbus_tx_buf, 4 + len);
+			modbus_tx_buf[4+len] = crc/256;
+			modbus_tx_buf[4+len+1] = crc%256;
+			Uart_Write(modbus_tx_buf, 4+len+1+1);
+		}
+		//读取偏置之内参数
+		if (fun_code == 0x07)
+		{
+			start_addr = modbus_rx_buf[2]*256 + modbus_rx_buf[3];
+			//length in "byte"
+			len = 2 * (modbus_rx_buf[4]*256 + modbus_rx_buf[5]);
+			if (start_addr + len > REG_OFFSET)
+			{
+				return;
+			}
+			
+			modbus_tx_buf[0] = com_addr;
+			modbus_tx_buf[1] = 0x07;
 			modbus_tx_buf[2] = len/256;
 			modbus_tx_buf[3] = len%256;
 			for(i=0;i<len;i++)
@@ -154,9 +195,20 @@ static void rx_process()
 		{
 			uint16_t addr = modbus_rx_buf[2] * 256 + modbus_rx_buf[3];
 			uint16_t value = modbus_rx_buf[4] * 256 + modbus_rx_buf[5];
-			if (addr == 0x00)
+			if (addr < REG_OFFSET/2)
 			{
-				calibration = value;
+				//校准参数需要限定范围
+				if (addr < 6 && value < CALIBRATE_UPPER_LIMIT && value > CALIBRATE_LOWER_LIMIT)
+				{
+					if (addr < 3)
+					{
+						voltage_factor[addr] = value;
+					}
+					else
+					{
+						current_factor[addr-3] = value;
+					}
+				}
 				configs_save();
 			}
 			Uart_Write(modbus_rx_buf, 8);

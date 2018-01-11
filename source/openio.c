@@ -76,12 +76,12 @@ void openio_output()
 {
 	if(alarm_type1)
 	{
-		io_out1 = check_alarm1(alarm_type1,alarm_value1);
+		io_out1 = alarm_AL1 = check_alarm1(alarm_type1,alarm_value1);
 	}
 	
 	if (alarm_type2)
 	{
-		io_out2 = check_alarm2(alarm_type2,alarm_value2);
+		io_out2 = alarm_AL2 = check_alarm2(alarm_type2,alarm_value2);
 	}
 	
 	if (io_out1)
