@@ -2,6 +2,8 @@
 #include "configs.h"
 #include "stdio.h"
 #include "string.h"
+
+/**********************底层显示基本字段定义****************************/
 /**
 	* 0:NA
 	* 1:上b-下c-sigma-中b-上a-var-中c-中a
@@ -12,9 +14,11 @@
 //显存
 unsigned char disp_buf[16];
 
-const unsigned char NUM_TAB[16]={0x5f,0x05,0xd9,0x9d,0x87,0x9e,0xde,0x15,0xdf,0x9f,0xd7,0xce,0x5a,0xcd,0xda,0xd2};
+const unsigned char NUM_TAB[16]={0x5f,0x05,0xd9,0x9d,0x87,0x9e,0xde,0x15,
+                                  0xdf,0x9f,0xd7,0xce,0x5a,0xcd,0xda,0xd2};
 const unsigned char ADD_DOT=0x20;
-const unsigned char CHAR_P=0xD3,CHAR_U=0x4f,CHAR_u=0x4c,CHAR_T=0xca,CHAR_R=0xc0,CHAR_N=0x57,CHAR_O=0xcc,CHAR_L=0x4a,CHAR_H=0xc7,CHAR_BAR=0x80;
+const unsigned char CHAR_P=0xD3,CHAR_U=0x4f,CHAR_u=0x4c,CHAR_T=0xca,CHAR_R=0xc0,CHAR_N=0x57,CHAR_O=0xcc,
+                    CHAR_L=0x4a,CHAR_H=0xc7,CHAR_BAR=0x80,CHAR_n=0xc4,CHAR_l=0x42,CHAR_Y=0x8f;
 
 unsigned char KEY_LEFT=0;
 unsigned char KEY_RIGHT=0;
@@ -23,6 +27,63 @@ unsigned char KEY_ENTER=0;
 
 //-,aL,bL,cL,aH,bH,cH
 const uint16_t TYPE_TAB[ALARM_TYPE_NUM] = {0x0080,0xd74a,0xce4a,0x5a4a,0xd7c7,0xcec7,0x5ac7};
+
+/*********************************显示及按键处理定义****************************************/
+void display_show_measure(str_menu* self);
+void display_code(str_menu* self);
+void display_conn_type(str_menu* self);
+void display_alarm_type(str_menu* self);
+void display_alarm_value1(str_menu* self);
+void display_alarm_value2(str_menu* self);
+void display_voltage_ratio(str_menu* self);
+void display_current_ratio(str_menu* self);
+void display_baudrate(str_menu* self);
+void display_com_addr(str_menu* self);
+void display_set_password(str_menu* self);
+void display_confirm(str_menu* self);
+
+void key_show_measure(str_menu* self);
+void key_code(str_menu* self);
+void key_conn_type(str_menu* self);
+void key_alarm_type(str_menu* self);
+void key_alarm_value1(str_menu* self);
+void key_alarm_value2(str_menu* self);
+void key_voltage_ratio(str_menu* self);
+void key_current_ratio(str_menu* self);
+void key_baudrate(str_menu* self);
+void key_com_addr(str_menu* self);
+void key_set_password(str_menu* self);
+void key_confirm(str_menu* self);
+
+/********************************菜单显示结构定义*********************************/
+const uint8_t MENU_NUM = 12;
+const uint8_t CONFIRM_INDEX = MENU_NUM -1 ;
+const uint16_t TOGGLE_PERIOD = 500;
+uint8_t menu_index = 0;
+uint8_t menu_switch_flag = 0;
+
+str_menu menu_show_measure = {0,0xff,0,display_show_measure,key_show_measure},
+menu_code = {0,0xff,0,display_code,key_code}, 
+menu_conn_type = {0,0xff,0,display_conn_type,key_conn_type},
+menu_alarm_type = {0,0xff,0,display_alarm_type,key_alarm_type}, 
+menu_alarm_value1 = {0,0xff,0,display_alarm_value1,key_alarm_value1},
+menu_alarm_value2 = {0,0xff,0,display_alarm_value2,key_alarm_value2}, 
+menu_voltage_ratio = {0,0xff,0,display_voltage_ratio,key_voltage_ratio}, 
+menu_current_ratio = {0,0xff,0,display_current_ratio,key_current_ratio}, 
+menu_baudrate = {0,0xff,0,display_baudrate,key_baudrate}, 
+menu_com_addr = {0,0xff,0,display_com_addr,key_com_addr},
+menu_set_password = {0,0xff,0,display_set_password,key_set_password}, 
+menu_confirm = {0,0xff,0,display_confirm,key_confirm};
+
+str_menu* p_menu[MENU_NUM] = {&menu_show_measure, &menu_code, &menu_conn_type, &menu_alarm_type,
+&menu_alarm_value1, &menu_alarm_value2, &menu_voltage_ratio, &menu_current_ratio, &menu_baudrate,
+&menu_com_addr, &menu_set_password, &menu_confirm};
+
+/*************************************辅助函数定义****************************************/
+uint8_t get_digit(int16_t num, uint8_t index);
+int16_t change_digit(int16_t num, uint8_t index, uint8_t digit);
+int16_t add_digit(int16_t num, uint8_t index);
+int16_t dec_digit(int16_t num, uint8_t index);
 
 typedef struct{
 	uint16_t number;
@@ -41,7 +102,25 @@ void display_init(void)
 	TM1629C_Clear();
 }
 
-//refresh diplay buffer
+/********显示及按键处理调用函数*****/
+void menu_call()
+{
+  static uint8_t old_index =0 ;
+  if (old_index != menu_index)
+  {
+    menu_switch_flag = 1;
+    display_clear();
+  }
+  else
+  {
+    menu_switch_flag = 0;
+  }
+  old_index = menu_index;
+  p_menu[menu_index]->disp(p_menu[menu_index]);
+  p_menu[menu_index]->key(p_menu[menu_index]);
+}
+
+/************刷新显示**********/
 static void display_refresh(uint8_t *disp_buf)
 {
 	unsigned char buf[16];
@@ -67,14 +146,14 @@ static void display_refresh(uint8_t *disp_buf)
 	TM1629C_Refresh(buf);
 }
 
-//清空本地缓存及显示驱动缓存
+/**********清空本地缓存及显示驱动缓存*******/
 void display_clear()
 {
   memset(disp_buf,0,16);
 	display_refresh(disp_buf);
 }
 
-//DO,DI,AL1,AL2等附加显示项
+/********DO,DI,AL1,AL2等附加显示项*********/
 static void display_additional()
 {
 	//DI
@@ -90,8 +169,11 @@ static void display_additional()
 	disp_buf[2] = alarm_AL2 ? disp_buf[2]|0x04 : disp_buf[2];
 }
 
+/*********************菜单显示及按键处理函数*********************/
+
+/***********************1.测量显示*********/
 //显示电压
-void display_show_voltage()
+void display_show_voltage(str_menu* self)
 {
 	int i;
 	display_set_volts(measured_volts);
@@ -132,7 +214,7 @@ void display_show_voltage()
 }
 
 //显示电流
-void display_show_current()
+void display_show_current(str_menu* self)
 {
 	int i;
 	display_set_currents(measured_currents);
@@ -165,58 +247,110 @@ void display_show_current()
 }
 
 //display page for volt or current
-void display_show_measure()
+void display_show_measure(str_menu* self)
 {
 	if (show_flag == 0)
 	{
-		display_show_voltage();
+		display_show_voltage(self);
 	}
 	else
 	{
-		display_show_current();
+		display_show_current(self);
 	}
 }
-
-//设置电压变比
-void display_voltage_ratio()
+//测量显示按键处理
+void key_show_measure(str_menu* self)
 {
-	disp_buf[15]=CHAR_P;
-	disp_buf[14]=CHAR_T;
-	disp_buf[11]=NUM_TAB[volt_ratio/1000];
-	disp_buf[10]=NUM_TAB[volt_ratio/100%10];
-	disp_buf[9]=NUM_TAB[volt_ratio/10%10];
-	disp_buf[8]=NUM_TAB[volt_ratio%10];
-	display_refresh(disp_buf);
+  if(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+    if(KEY_LEFT || KEY_RIGHT){
+      if(show_flag){
+        show_flag=0;
+      }
+      else{
+        show_flag=1;
+      }
+    }
+    if (KEY_SET){
+      menu_index++;
+    }
+    while(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+      display_getkeys();
+    }
+  }
 }
 
-//设置电流变比
-void display_current_ratio()
+/****************2.参数设定密码输入*****************/
+void display_code(str_menu* self)
 {
-	disp_buf[15]=NUM_TAB[0x0c];
-	disp_buf[14]=CHAR_T;
-	disp_buf[11]=NUM_TAB[current_ratio/1000];
-	disp_buf[10]=NUM_TAB[current_ratio/100%10];
-	disp_buf[9]=NUM_TAB[current_ratio/10%10];
-	disp_buf[8]=NUM_TAB[current_ratio%10];
+  if (menu_switch_flag)
+  {
+    self->index = 8;
+    password_disp=1;
+  }
+	disp_buf[15] = NUM_TAB[0x0c];
+	disp_buf[14] = CHAR_O;
+	disp_buf[13] = NUM_TAB[0x0d];
+	disp_buf[12] = NUM_TAB[0x0e];
+	
+	disp_buf[11]=NUM_TAB[password_disp/1000];
+	disp_buf[10]=NUM_TAB[password_disp/100%10];
+	disp_buf[9]=NUM_TAB[password_disp/10%10];
+	disp_buf[8]=NUM_TAB[password_disp%10];
+  
+  //闪烁位
+  disp_buf[self->index] =  disp_buf[self->index] & self->flag;
+  
 	display_refresh(disp_buf);
+  
+  self->tick++;
+  if (self->tick % TOGGLE_PERIOD == 0)
+  {
+    self->flag = self->flag > 0?0:0xff;
+  }
+}
+void key_code(str_menu* self)
+{
+  if(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+    if(KEY_LEFT){
+      self->index = self->index + 1 > 11 ? 8:self->index + 1;
+    }
+    if(KEY_RIGHT){
+      password_disp = add_digit(password_disp,self->index - 8);
+    }
+    if (KEY_SET){
+      menu_index=0;
+    }
+    if (KEY_ENTER){
+      if (password_disp == password){
+        //进入参数设置前载入当前参数
+        load_configs();
+        menu_index++;
+      }
+    }
+    while(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+      display_getkeys();
+    }
+  }
 }
 
-//电压连接方式
-void display_conn_type()
+/**************3.连接方式**************/
+void display_conn_type(str_menu* self)
 {
-	disp_buf[15]=NUM_TAB[0x0c];
-	disp_buf[14]=NUM_TAB[0x0];
-	disp_buf[13]=CHAR_N;
-	disp_buf[12]=CHAR_N;
+	disp_buf[15]=CHAR_l;
+	disp_buf[14]=CHAR_n|ADD_DOT;
+	disp_buf[13]=CHAR_P;
+	disp_buf[12]=CHAR_T;
 	
 	//set for volt
 	disp_buf[11]=CHAR_U;
 	if (volt_conn_type)
 	{
+    disp_buf[9]=NUM_TAB[0x03]|ADD_DOT;
 		disp_buf[8]=NUM_TAB[0x03];
 	}
 	else
 	{
+    disp_buf[9]=NUM_TAB[0x03]|ADD_DOT;
 		disp_buf[8]=NUM_TAB[0x04];
 	}
 	
@@ -224,21 +358,55 @@ void display_conn_type()
 	disp_buf[7]=NUM_TAB[0x0a];
 	if (current_conn_type)
 	{
-		disp_buf[4]=NUM_TAB[0x03];
+		disp_buf[5]=NUM_TAB[0x02];
+    disp_buf[4]=NUM_TAB[0x0c];
 	}
 	else
 	{
-		disp_buf[4]=NUM_TAB[0x04];
+		disp_buf[5]=NUM_TAB[0x03];
+    disp_buf[4]=NUM_TAB[0x0c];
 	}
 	display_refresh(disp_buf);
 }
-
-//报警输出类型
-void display_alarm_type()
+void key_conn_type(str_menu* self)
 {
-	disp_buf[15]=CHAR_O;
-	disp_buf[14]=CHAR_u;
-	disp_buf[13]=CHAR_T;
+  if(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+    if(KEY_LEFT){
+      if(volt_conn_type){
+        volt_conn_type=0;
+      }
+      else{
+        volt_conn_type=1;
+      }
+    }
+    if (KEY_RIGHT)
+    {
+      if(current_conn_type){
+        current_conn_type=0;
+      }
+      else{
+        current_conn_type=1;
+      }
+    }
+    if (KEY_SET)
+    {
+      menu_index++;
+    }
+    if (KEY_ENTER)
+    {
+      menu_index = CONFIRM_INDEX;
+    }
+    while(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+      display_getkeys();
+    }
+  }
+}
+/****************4.开出类型设置*****************/
+void display_alarm_type(str_menu* self)
+{
+	disp_buf[15]=NUM_TAB[0x0d];
+	disp_buf[14]=CHAR_O;
+	disp_buf[13]=0;
 	disp_buf[12]=0;
 	
 	//set for o1
@@ -253,41 +421,238 @@ void display_alarm_type()
 	
 	display_refresh(disp_buf);
 }
-
-//报警输出1
-void display_alarm_value1()
+void key_alarm_type(str_menu* self)
 {
-	disp_buf[15]=CHAR_O;
-	disp_buf[14]=NUM_TAB[0x01];
-	disp_buf[13]=0;
-	disp_buf[12]=0;
+  if(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+    if(KEY_LEFT){
+      alarm_type1++;
+      if(alarm_type1>=ALARM_TYPE_NUM){
+        alarm_type1=0;
+      }
+    }
+    if (KEY_RIGHT)
+    {
+      alarm_type2++;
+      if(alarm_type2>=ALARM_TYPE_NUM){
+        alarm_type2=0;
+      }
+    }
+    if (KEY_SET)
+    {
+      menu_index++;
+    }
+    if (KEY_ENTER)
+    {
+      menu_index = CONFIRM_INDEX;
+    }
+    while(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+      display_getkeys();
+    }
+  }
+}
+/*************5.开出1阈值设置**********/
+void display_alarm_value1(str_menu* self)
+{
+  if (menu_switch_flag)
+  {
+    self->index = 8;
+    password_disp=1;
+  }
+  
+	disp_buf[15]=NUM_TAB[0x0d];
+	disp_buf[14]=CHAR_O;
+	disp_buf[13]=CHAR_BAR;
+	disp_buf[12]=NUM_TAB[0x01];
 	
-	disp_buf[11]=NUM_TAB[0x00];
 	disp_buf[10]=NUM_TAB[alarm_value1/100%10];
 	disp_buf[9]=NUM_TAB[alarm_value1/10%10];
 	disp_buf[8]=NUM_TAB[alarm_value1%10];
 	
+	disp_buf[self->index] =  disp_buf[self->index] & self->flag;
+  
 	display_refresh(disp_buf);
+  
+  self->tick++;
+  if (self->tick % TOGGLE_PERIOD == 0)
+  {
+    self->flag = self->flag > 0?0:0xff;
+  }
 }
-
-//报警输出2
-void display_alarm_value2()
+void key_alarm_value1(str_menu* self)
 {
-	disp_buf[15]=CHAR_O;
-	disp_buf[14]=NUM_TAB[0x02];
-	disp_buf[13]=0;
-	disp_buf[12]=0;
+  int16_t tmp;
+  if(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+    if(KEY_LEFT){
+      self->index = self->index + 1 > 10 ? 8:self->index + 1;
+    }
+    if(KEY_RIGHT){
+      tmp = add_digit(alarm_value1,self->index - 8);
+      alarm_value1 = tmp < 120 ? tmp:change_digit(alarm_value1,self->index - 8,0);
+    }
+    if (KEY_SET)
+    {
+      menu_index++;
+    }
+    if (KEY_ENTER)
+    {
+      menu_index = CONFIRM_INDEX;
+    }
+    while(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+      display_getkeys();
+    }
+  }
+}
+/*************6.开出2阈值设置**********/
+void display_alarm_value2(str_menu* self)
+{
+  if (menu_switch_flag)
+  {
+    self->index = 8;
+    password_disp=1;
+  }
+  
+	disp_buf[15]=NUM_TAB[0x0d];
+	disp_buf[14]=CHAR_O;
+	disp_buf[13]=CHAR_BAR;
+	disp_buf[12]=NUM_TAB[0x02];
 	
-	disp_buf[11]=NUM_TAB[0x00];
 	disp_buf[10]=NUM_TAB[alarm_value2/100%10];
 	disp_buf[9]=NUM_TAB[alarm_value2/10%10];
 	disp_buf[8]=NUM_TAB[alarm_value2%10];
 	
+	disp_buf[self->index] =  disp_buf[self->index] & self->flag;
+  
 	display_refresh(disp_buf);
+  
+  self->tick++;
+  if (self->tick % TOGGLE_PERIOD == 0)
+  {
+    self->flag = self->flag > 0?0:0xff;
+  }
 }
-
-//设置波特率
-void display_baudrate()
+void key_alarm_value2(str_menu* self)
+{
+  int16_t tmp;
+  if(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+			if(KEY_LEFT){
+        self->index = self->index + 1 > 10 ? 8:self->index + 1;
+      }
+      if(KEY_RIGHT){
+        tmp = add_digit(alarm_value2,self->index - 8);
+        alarm_value2 = tmp < 120 ? tmp:change_digit(alarm_value2,self->index - 8,0);
+      }
+      if (KEY_SET)
+      {
+        menu_index++;
+      }
+      if (KEY_ENTER)
+      {
+        menu_index = CONFIRM_INDEX;
+      }
+			while(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+				display_getkeys();
+			}
+		}
+}
+/*************7.设置电压变比*************/
+void display_voltage_ratio(str_menu* self)
+{
+  if (menu_switch_flag)
+  {
+    self->index = 8;
+  }
+	disp_buf[15]=CHAR_P;
+	disp_buf[14]=CHAR_T;
+  
+	disp_buf[11]=NUM_TAB[volt_ratio/1000];
+	disp_buf[10]=NUM_TAB[volt_ratio/100%10];
+	disp_buf[9]=NUM_TAB[volt_ratio/10%10];
+	disp_buf[8]=NUM_TAB[volt_ratio%10];
+  
+  //闪烁位
+  disp_buf[self->index] =  disp_buf[self->index] & self->flag;
+  
+	display_refresh(disp_buf);
+  
+  self->tick++;
+  if (self->tick % TOGGLE_PERIOD == 0)
+  {
+    self->flag = self->flag > 0?0:0xff;
+  }
+  
+}
+void key_voltage_ratio(str_menu* self)
+{
+  if(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+    if(KEY_LEFT){
+      self->index = self->index + 1 > 11 ? 8:self->index + 1;
+    }
+    if(KEY_RIGHT){
+      volt_ratio = add_digit(volt_ratio,self->index - 8);
+    }
+    if (KEY_SET)
+    {
+      menu_index++;
+    }
+    if (KEY_ENTER)
+    {
+      menu_index = CONFIRM_INDEX;
+    }
+    while(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+      display_getkeys();
+    }
+  }
+}
+/*************8.设置电流变比*************/
+void display_current_ratio(str_menu* self)
+{
+  if (menu_switch_flag)
+  {
+    self->index = 8;
+  }
+  
+	disp_buf[15]=NUM_TAB[0x0c];
+	disp_buf[14]=CHAR_T;
+  
+	disp_buf[11]=NUM_TAB[current_ratio/1000];
+	disp_buf[10]=NUM_TAB[current_ratio/100%10];
+	disp_buf[9]=NUM_TAB[current_ratio/10%10];
+	disp_buf[8]=NUM_TAB[current_ratio%10];
+  
+  //闪烁位
+  disp_buf[self->index] =  disp_buf[self->index] & self->flag;
+  
+	display_refresh(disp_buf);
+  self->tick++;
+  if (self->tick % TOGGLE_PERIOD == 0)
+  {
+    self->flag = self->flag > 0?0:0xff;
+  }
+}
+void key_current_ratio(str_menu* self)
+{
+  if(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+    if(KEY_LEFT){
+      self->index = self->index + 1 > 11 ? 8:self->index + 1;
+    }
+    if(KEY_RIGHT){
+      current_ratio = add_digit(current_ratio,self->index - 8);
+    }
+    if (KEY_SET)
+    {
+      menu_index++;
+    }
+    if (KEY_ENTER)
+    {
+      menu_index = CONFIRM_INDEX;
+    }
+    while(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+      display_getkeys();
+    }
+  }
+}
+/*************9.波特率设置*********/
+void display_baudrate(str_menu* self)
 {
 	disp_buf[15]=NUM_TAB[0x0b];
 	disp_buf[14]=NUM_TAB[0x0a];
@@ -299,9 +664,43 @@ void display_baudrate()
 	disp_buf[8]=NUM_TAB[BAUD_TAB[baud_index]%10];
 	display_refresh(disp_buf);
 }
-//设置通讯地址
-void display_com_addr()
+void key_baudrate(str_menu* self)
 {
+  if(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+    if(KEY_LEFT){
+      baud_index--;
+      if(baud_index<0){
+        baud_index=BAUD_NUM-1;
+      }
+    }
+    if(KEY_RIGHT){
+      baud_index++;
+      if(baud_index>=BAUD_NUM){
+        baud_index=0;
+      }
+    }
+    if (KEY_SET)
+    {
+      menu_index++;
+    }
+    if (KEY_ENTER)
+    {
+      menu_index = CONFIRM_INDEX;
+    }
+    while(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+      display_getkeys();
+    }
+  }
+}
+/************10.设置通讯地址***********/
+void display_com_addr(str_menu* self)
+{
+  if (menu_switch_flag)
+  {
+    self->index = 8;
+    password_disp=1;
+  }
+  
 	disp_buf[15]=NUM_TAB[0x0a];
 	disp_buf[14]=NUM_TAB[0x0d];
 	disp_buf[13]=NUM_TAB[0x0d];
@@ -310,9 +709,131 @@ void display_com_addr()
 	disp_buf[10]=NUM_TAB[com_addr/100%10];
 	disp_buf[9]=NUM_TAB[com_addr/10%10];
 	disp_buf[8]=NUM_TAB[com_addr%10];
+  
+	disp_buf[self->index] =  disp_buf[self->index] & self->flag;
+  
 	display_refresh(disp_buf);
+  
+  self->tick++;
+  if (self->tick % TOGGLE_PERIOD == 0)
+  {
+    self->flag = self->flag > 0?0:0xff;
+  }
+}
+void key_com_addr(str_menu* self)
+{
+  int16_t tmp_addr;
+  if(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+    if(KEY_LEFT){
+      self->index = self->index + 1 > 10 ? 8:self->index + 1;
+    }
+    if(KEY_RIGHT){
+      tmp_addr = add_digit(com_addr,self->index - 8);
+      com_addr = tmp_addr < ADDR_MAX ? tmp_addr:change_digit(com_addr,self->index - 8,0);
+    }
+    if (KEY_SET)
+    {
+      menu_index++;
+    }
+    if (KEY_ENTER)
+    {
+      menu_index = CONFIRM_INDEX;
+    }
+    while(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+      display_getkeys();
+    }
+  }
 }
 
+/************11.设置新密码*************/
+void display_set_password(str_menu* self)
+{
+  if (menu_switch_flag)
+  {
+    self->index = 4;
+    password_disp=1;
+  }
+  disp_buf[15] = NUM_TAB[0x05];
+	disp_buf[14] = NUM_TAB[0x0e];
+	disp_buf[13] = CHAR_T;
+	disp_buf[12] = 0;
+  
+	disp_buf[11] = NUM_TAB[0x0c];
+	disp_buf[10] = CHAR_O;
+	disp_buf[9] = NUM_TAB[0x0d];
+	disp_buf[8] = NUM_TAB[0x0e];
+	
+	disp_buf[7]=NUM_TAB[password_disp/1000];
+	disp_buf[6]=NUM_TAB[password_disp/100%10];
+	disp_buf[5]=NUM_TAB[password_disp/10%10];
+	disp_buf[4]=NUM_TAB[password_disp%10];
+	//闪烁位
+  disp_buf[self->index] =  disp_buf[self->index] & self->flag;
+  
+	display_refresh(disp_buf);
+  
+  self->tick++;
+  if (self->tick % TOGGLE_PERIOD == 0)
+  {
+    self->flag = self->flag > 0?0:0xff;
+  }
+}
+void key_set_password(str_menu* self)
+{
+  if(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+    if(KEY_LEFT){
+      self->index = self->index + 1 > 7 ? 4:self->index + 1;
+    }
+    if(KEY_RIGHT){
+      password_disp = add_digit(password_disp,self->index - 4);
+    }
+    if (KEY_SET)
+    {
+      menu_index++;
+    }
+    if (KEY_ENTER)
+    {
+      menu_index = CONFIRM_INDEX;
+    }
+    while(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+      display_getkeys();
+    }
+  }
+}
+/***********12.参数修改确认保存*************/
+void display_confirm(str_menu* self)
+{
+  disp_buf[15] = NUM_TAB[0x05];
+	disp_buf[14] = NUM_TAB[0x0a];
+	disp_buf[13] = CHAR_U;
+	disp_buf[12] = NUM_TAB[0x0e];
+  
+	disp_buf[11] = 0;
+	disp_buf[10] = CHAR_Y;
+	disp_buf[9] = NUM_TAB[0x0e];
+	disp_buf[8] = NUM_TAB[0x05];
+	
+	display_refresh(disp_buf);
+}
+void key_confirm(str_menu* self)
+{
+  if(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+    if (KEY_SET)
+    {
+      menu_index=0;
+    }
+    if (KEY_ENTER)
+    {
+      menu_index=0;
+      password = password_disp;
+      configs_save();
+    }
+    while(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
+      display_getkeys();
+    }
+  }
+}
+/*****************************************/
 void display_getkeys()
 {
 	unsigned char buf[4];
@@ -321,6 +842,66 @@ void display_getkeys()
 	KEY_LEFT=buf[0]&0xf0;
 	KEY_SET=buf[1]&0xf0;
 	KEY_ENTER=buf[1]&0x0f;
+}
+
+//获取四位数字的某一位
+uint8_t get_digit(int16_t num, uint8_t index)
+{
+  uint8_t digit;
+  switch (index)
+  {
+    case 0:
+      digit = num % 10;
+      break;
+    case 1:
+      digit = num /10 % 10;
+      break;
+    case 2:
+      digit = num / 100 % 10;
+      break;
+    default:
+      digit = num / 1000 % 10;
+      break;
+  }
+  return digit;
+}
+//获取修改四位数的某一位的结果
+int16_t change_digit(int16_t num, uint8_t index, uint8_t digit)
+{
+  int16_t result;
+  switch (index)
+  {
+    case 0:
+      result = num / 10 * 10 + digit;
+      break;
+    case 1:
+      result = num/100*100 + digit*10 + num%10;
+      break;
+    case 2:
+      result = num/1000*1000 + digit*100 + num%100;
+      break;
+    default:
+      result = num%1000 + digit*1000;
+      break;
+  }
+  return result;
+}
+
+//增加四位数字某一位
+int16_t add_digit(int16_t num, uint8_t index)
+{
+  uint8_t digit;
+  digit = get_digit(num, index);
+  digit++;
+  return change_digit(num,index,digit%10);
+}
+//减小四位数字某一位
+int16_t dec_digit(int16_t num, uint8_t index)
+{
+  uint8_t digit;
+  digit = get_digit(num, index);
+  digit--;
+  return change_digit(num,index,digit%10);
 }
 
 //浮点数转显示结构体

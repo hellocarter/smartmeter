@@ -3,7 +3,7 @@
 
 #define PAGE_ADDR 0x0801f000
 
-const uint16_t FLASH_NUM = 16;
+const uint16_t FLASH_NUM = 19;
 
 //内部寄存器偏置量
 const uint16_t REG_OFFSET = 16;
@@ -17,8 +17,11 @@ const int16_t ADDR_MAX=247;
 
 uint8_t* regs[REG_NUM];
 
-//const float VOLT_THRESHOLD = 0.0;
-//const float CURRENT_THRESHOLD = 0.0;
+//实际密码
+int16_t password;
+
+//显示密码
+int16_t password_disp;
 
 //电压或者电流,0电流,1电压
 uint8_t show_flag;
@@ -26,7 +29,7 @@ uint8_t show_flag;
 //电压接法,0-三相四线,1-三相三线
 int8_t volt_conn_type = 0;
 
-//电流接法,0-三相四线,1-三相三线
+//电流接法,0-三相3CT,1-三相2CT
 int8_t current_conn_type = 0;
 
 int16_t volt_ratio;
@@ -144,8 +147,15 @@ void configs_save()
 	buf[14] = current_factor[1];
 	buf[15] = current_factor[2];
 	
+	buf[16] = password;
+	
+  buf[17] = volt_conn_type;
+  buf[18] = current_conn_type;
+  
 	MemWriteByte(buf,FLASH_NUM);
 	modbus_init(BAUD_TAB[baud_index]);
+  
+  password_disp = 1;
 }
 
 void load_configs()
@@ -177,6 +187,10 @@ void load_configs()
 		current_factor[1] = CALIBRATE_LOWER_LIMIT<config_paras[14]&&config_paras[14]<CALIBRATE_UPPER_LIMIT?config_paras[14]:1000;
 		current_factor[2] = CALIBRATE_LOWER_LIMIT<config_paras[15]&&config_paras[15]<CALIBRATE_UPPER_LIMIT?config_paras[15]:1000;
 
+		password = config_paras[16] > 0 && config_paras[16] < 100 ? config_paras[16]:1;
+    volt_conn_type = config_paras[17];
+    current_conn_type = config_paras[18];
+    
 		modbus_init(BAUD_TAB[baud_index]);
 	}
 	else
@@ -199,8 +213,14 @@ void load_configs()
 		alarm_type2 = 0;
 		alarm_value1 = 0;
 		alarm_value2 = 0;
+		
+    volt_conn_type = 0;
+    current_conn_type = 0;
+    
+		password = 1;
 		configs_save();
 	}
+  password_disp = 1;
 }
 
 static uint8_t MemReadByte(int16_t *data,uint16_t num)                                

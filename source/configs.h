@@ -33,6 +33,9 @@ extern int16_t alarm_value2;
 extern int8_t alarm_AL1;
 extern int8_t alarm_AL2;
 
+extern int16_t password;
+extern int16_t password_disp;
+
 extern const uint8_t BAUD_NUM;
 extern const uint16_t BAUD_TAB[];
 extern const int16_t ADDR_MAX;

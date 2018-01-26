@@ -144,7 +144,7 @@ static void rx_process()
 			modbus_tx_buf[3] = len%256;
 			for(i=0;i<len;i++)
 			{
-				modbus_tx_buf[4+i] = *(regs[start_addr+i - REG_OFFSET]);
+				modbus_tx_buf[4+i] = *(regs[start_addr+i + REG_OFFSET]);
 			}
 			crc = calc_crc(modbus_tx_buf, 4 + len);
 			modbus_tx_buf[4+len] = crc/256;

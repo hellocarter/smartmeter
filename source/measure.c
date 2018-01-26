@@ -36,7 +36,7 @@
 #define MEASURE_MIN_VOLTAGE 5 //5
 
 //最小检测显示电流
-#define MEASURE_MIN_CURRENT 0.0 //0.05
+#define MEASURE_MIN_CURRENT 0.05 //0.05
 
 //检测更新周期(eg:100ms/1ms=100)
 const uint16_t MEASURE_CYCLES = 5000;
