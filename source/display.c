@@ -61,6 +61,7 @@ const uint8_t CONFIRM_INDEX = MENU_NUM -1 ;
 const uint16_t TOGGLE_PERIOD = 500;
 uint8_t menu_index = 0;
 uint8_t menu_switch_flag = 0;
+uint8_t is_save;
 
 str_menu menu_show_measure = {0,0xff,0,display_show_measure,key_show_measure},
 menu_code = {0,0xff,0,display_code,key_code}, 
@@ -468,6 +469,7 @@ void display_alarm_value1(str_menu* self)
 	disp_buf[9]=NUM_TAB[alarm_value1/10%10];
 	disp_buf[8]=NUM_TAB[alarm_value1%10];
 	
+  disp_buf[4]=CHAR_U;
 	disp_buf[self->index] =  disp_buf[self->index] & self->flag;
   
 	display_refresh(disp_buf);
@@ -487,7 +489,7 @@ void key_alarm_value1(str_menu* self)
     }
     if(KEY_RIGHT){
       tmp = add_digit(alarm_value1,self->index - 8);
-      alarm_value1 = tmp < 120 ? tmp:change_digit(alarm_value1,self->index - 8,0);
+      alarm_value1 = tmp <= 120 ? tmp:change_digit(alarm_value1,self->index - 8,0);
     }
     if (KEY_SET)
     {
@@ -519,6 +521,8 @@ void display_alarm_value2(str_menu* self)
 	disp_buf[10]=NUM_TAB[alarm_value2/100%10];
 	disp_buf[9]=NUM_TAB[alarm_value2/10%10];
 	disp_buf[8]=NUM_TAB[alarm_value2%10];
+  
+  disp_buf[4]=NUM_TAB[0x0a];
 	
 	disp_buf[self->index] =  disp_buf[self->index] & self->flag;
   
@@ -539,7 +543,7 @@ void key_alarm_value2(str_menu* self)
       }
       if(KEY_RIGHT){
         tmp = add_digit(alarm_value2,self->index - 8);
-        alarm_value2 = tmp < 120 ? tmp:change_digit(alarm_value2,self->index - 8,0);
+        alarm_value2 = tmp <= 120 ? tmp:change_digit(alarm_value2,self->index - 8,0);
       }
       if (KEY_SET)
       {
@@ -803,30 +807,45 @@ void key_set_password(str_menu* self)
 /***********12.参数修改确认保存*************/
 void display_confirm(str_menu* self)
 {
+  if (menu_switch_flag)
+  {
+    is_save = 1;
+  }
   disp_buf[15] = NUM_TAB[0x05];
 	disp_buf[14] = NUM_TAB[0x0a];
 	disp_buf[13] = CHAR_U;
 	disp_buf[12] = NUM_TAB[0x0e];
   
-	disp_buf[11] = 0;
-	disp_buf[10] = CHAR_Y;
-	disp_buf[9] = NUM_TAB[0x0e];
-	disp_buf[8] = NUM_TAB[0x05];
+  if (is_save)
+  {
+    disp_buf[10] = CHAR_Y;
+    disp_buf[9] = NUM_TAB[0x0e];
+    disp_buf[8] = NUM_TAB[0x05];
+  }
+  else
+  {
+    disp_buf[10] = 0;
+    disp_buf[9] = CHAR_n;
+    disp_buf[8] = CHAR_O;
+  }
 	
 	display_refresh(disp_buf);
 }
 void key_confirm(str_menu* self)
 {
   if(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
-    if (KEY_SET)
+    if (KEY_LEFT||KEY_RIGHT)
     {
-      menu_index=0;
+      is_save = is_save>0?0:1;
     }
     if (KEY_ENTER)
     {
+      if (is_save)
+      {
+        password = password_disp;
+        configs_save();
+      }
       menu_index=0;
-      password = password_disp;
-      configs_save();
     }
     while(KEY_LEFT||KEY_RIGHT||KEY_SET||KEY_ENTER){
       display_getkeys();

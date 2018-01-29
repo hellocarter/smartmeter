@@ -1,0 +1,1053 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+E:\STM32 Files\STM32F10x_StdPeriph_Lib_V3.5.0\Project\SmartMeter\SmartMeter.uvproj
+Project File Date:  11/07/2017
+
+<h2>Output:</h2>
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling modbus.c...
+Source\UART.h(4): warning:  #1-D: last line of file ends without a newline
+Source\modbus.c(241): warning:  #1-D: last line of file ends without a newline
+Source\modbus.c(78): warning:  #177-D: function "clear_tx_buf" was declared but never referenced
+linking...
+Program Size: Code=21308 RO-data=1284 RW-data=148 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 3 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling main.c...
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(85): warning:  #111-D: statement is unreachable
+source\main.c(408): warning:  #1-D: last line of file ends without a newline
+source\main.c(403): warning:  #550-D: variable "is_update" was set but never used
+compiling configs.c...
+compiling measure.c...
+source\ADC.h(5): warning:  #1-D: last line of file ends without a newline
+source\measure.c(152): warning:  #177-D: variable "Ica" was declared but never referenced
+compiling display.c...
+compiling modbus.c...
+Source\UART.h(4): warning:  #1-D: last line of file ends without a newline
+Source\modbus.c(241): warning:  #1-D: last line of file ends without a newline
+Source\modbus.c(78): warning:  #177-D: function "clear_tx_buf" was declared but never referenced
+compiling openio.c...
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+linking...
+Program Size: Code=21764 RO-data=1284 RW-data=156 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 16 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling configs.c...
+compiling display.c...
+linking...
+Program Size: Code=21772 RO-data=1284 RW-data=156 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling main.c...
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(85): warning:  #111-D: statement is unreachable
+source\main.c(411): warning:  #1-D: last line of file ends without a newline
+source\main.c(406): warning:  #550-D: variable "is_update" was set but never used
+linking...
+Program Size: Code=21772 RO-data=1284 RW-data=156 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 7 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling main.c...
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(85): warning:  #111-D: statement is unreachable
+source\main.c(412): warning:  #1-D: last line of file ends without a newline
+source\main.c(407): warning:  #550-D: variable "is_update" was set but never used
+linking...
+Program Size: Code=21776 RO-data=1288 RW-data=156 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 7 Warning(s).
+Build target 'SmartMeter'
+compiling main.c...
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(85): warning:  #111-D: statement is unreachable
+source\main.c(413): warning:  #1-D: last line of file ends without a newline
+source\main.c(408): warning:  #550-D: variable "is_update" was set but never used
+linking...
+Program Size: Code=21780 RO-data=1284 RW-data=156 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 7 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling main.c...
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(85): warning:  #111-D: statement is unreachable
+source\main.c(413): warning:  #1-D: last line of file ends without a newline
+source\main.c(408): warning:  #550-D: variable "is_update" was set but never used
+compiling display.c...
+linking...
+Program Size: Code=21780 RO-data=1284 RW-data=156 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 7 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=21776 RO-data=1288 RW-data=156 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling configs.c...
+compiling display.c...
+linking...
+Program Size: Code=21820 RO-data=1292 RW-data=156 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=21832 RO-data=1288 RW-data=156 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling main.c...
+source\display.h(33): warning:  #1-D: last line of file ends without a newline
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(86): warning:  #111-D: statement is unreachable
+source\main.c(414): warning:  #1-D: last line of file ends without a newline
+source\main.c(409): warning:  #550-D: variable "is_update" was set but never used
+compiling display.c...
+source\display.h(33): warning:  #1-D: last line of file ends without a newline
+compiling modbus.c...
+Source\UART.h(4): warning:  #1-D: last line of file ends without a newline
+Source\display.h(33): warning:  #1-D: last line of file ends without a newline
+Source\modbus.c(241): warning:  #1-D: last line of file ends without a newline
+Source\modbus.c(78): warning:  #177-D: function "clear_tx_buf" was declared but never referenced
+linking...
+Program Size: Code=21992 RO-data=1288 RW-data=160 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 13 Warning(s).
+Build target 'SmartMeter'
+compiling main.c...
+source\display.h(33): warning:  #1-D: last line of file ends without a newline
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(86): warning:  #111-D: statement is unreachable
+source\main.c(445): warning:  #1-D: last line of file ends without a newline
+source\main.c(440): warning:  #550-D: variable "is_update" was set but never used
+compiling configs.c...
+compiling display.c...
+source\display.h(33): warning:  #1-D: last line of file ends without a newline
+linking...
+Program Size: Code=22208 RO-data=1288 RW-data=160 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 9 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling measure.c...
+source\ADC.h(5): warning:  #1-D: last line of file ends without a newline
+source\measure.c(152): warning:  #177-D: variable "Ica" was declared but never referenced
+linking...
+Program Size: Code=22216 RO-data=1288 RW-data=160 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 2 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+source\display.h(33): warning:  #1-D: last line of file ends without a newline
+linking...
+Program Size: Code=22272 RO-data=1288 RW-data=160 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 1 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling main.c...
+source\display.h(34): warning:  #1-D: last line of file ends without a newline
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(86): warning:  #111-D: statement is unreachable
+source\main.c(445): warning:  #1-D: last line of file ends without a newline
+source\main.c(440): warning:  #550-D: variable "is_update" was set but never used
+compiling display.c...
+source\display.h(34): warning:  #1-D: last line of file ends without a newline
+compiling modbus.c...
+Source\UART.h(4): warning:  #1-D: last line of file ends without a newline
+Source\display.h(34): warning:  #1-D: last line of file ends without a newline
+Source\modbus.c(241): warning:  #1-D: last line of file ends without a newline
+Source\modbus.c(78): warning:  #177-D: function "clear_tx_buf" was declared but never referenced
+linking...
+Program Size: Code=22272 RO-data=1288 RW-data=164 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 13 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling main.c...
+source\display.h(34): warning:  #1-D: last line of file ends without a newline
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(86): warning:  #111-D: statement is unreachable
+source\main.c(445): warning:  #1-D: last line of file ends without a newline
+source\main.c(440): warning:  #550-D: variable "is_update" was set but never used
+linking...
+Program Size: Code=22240 RO-data=1288 RW-data=164 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 8 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+source\display.h(34): warning:  #1-D: last line of file ends without a newline
+linking...
+Program Size: Code=22296 RO-data=1288 RW-data=168 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 1 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+source\display.h(34): warning:  #1-D: last line of file ends without a newline
+linking...
+Program Size: Code=22296 RO-data=1288 RW-data=168 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 1 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling main.c...
+source\display.h(34): warning:  #1-D: last line of file ends without a newline
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(86): warning:  #111-D: statement is unreachable
+source\main.c(445): warning:  #1-D: last line of file ends without a newline
+source\main.c(440): warning:  #550-D: variable "is_update" was set but never used
+compiling display.c...
+source\display.h(34): warning:  #1-D: last line of file ends without a newline
+linking...
+Program Size: Code=22292 RO-data=1292 RW-data=168 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 9 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling main.c...
+source\display.h(34): warning:  #1-D: last line of file ends without a newline
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(86): warning:  #111-D: statement is unreachable
+source\main.c(445): warning:  #1-D: last line of file ends without a newline
+source\main.c(440): warning:  #550-D: variable "is_update" was set but never used
+compiling display.c...
+source\display.h(34): warning:  #1-D: last line of file ends without a newline
+linking...
+Program Size: Code=22240 RO-data=1288 RW-data=168 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 9 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling main.c...
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(24): error:  #20: identifier "display_show_measure" is undefined
+source\main.c(24): error:  #20: identifier "display_code" is undefined
+source\main.c(24): error:  #20: identifier "display_conn_type" is undefined
+source\main.c(25): error:  #20: identifier "display_alarm_type" is undefined
+source\main.c(25): error:  #20: identifier "display_alarm_value1" is undefined
+source\main.c(25): error:  #20: identifier "display_alarm_value2" is undefined
+source\main.c(25): error:  #20: identifier "display_voltage_ratio" is undefined
+source\main.c(26): error:  #20: identifier "display_current_ratio" is undefined
+source\main.c(26): error:  #20: identifier "display_baudrate" is undefined
+source\main.c(26): error:  #20: identifier "display_com_addr" is undefined
+source\main.c(26): error:  #20: identifier "display_set_password" is undefined
+source\main.c(26): error:  #20: identifier "display_confirm" is undefined
+source\main.c(76): warning:  #111-D: statement is unreachable
+source\main.c(107): error:  #29: expected an expression
+source\main.c(121): warning:  #1-D: last line of file ends without a newline
+source\main.c(116): warning:  #550-D: variable "is_update" was set but never used
+compiling display.c...
+source\display.c(64): error:  #29: expected an expression
+source\display.c(64): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+compiling modbus.c...
+Source\UART.h(4): warning:  #1-D: last line of file ends without a newline
+Source\modbus.c(241): warning:  #1-D: last line of file ends without a newline
+Source\modbus.c(78): warning:  #177-D: function "clear_tx_buf" was declared but never referenced
+".\output\SmartMeter.axf" - 37 Errors, 10 Warning(s).
+Target not created
+Build target 'SmartMeter'
+compiling main.c...
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(24): error:  #20: identifier "display_show_measure" is undefined
+source\main.c(24): error:  #20: identifier "display_code" is undefined
+source\main.c(24): error:  #20: identifier "display_conn_type" is undefined
+source\main.c(25): error:  #20: identifier "display_alarm_type" is undefined
+source\main.c(25): error:  #20: identifier "display_alarm_value1" is undefined
+source\main.c(25): error:  #20: identifier "display_alarm_value2" is undefined
+source\main.c(25): error:  #20: identifier "display_voltage_ratio" is undefined
+source\main.c(26): error:  #20: identifier "display_current_ratio" is undefined
+source\main.c(26): error:  #20: identifier "display_baudrate" is undefined
+source\main.c(26): error:  #20: identifier "display_com_addr" is undefined
+source\main.c(26): error:  #20: identifier "display_set_password" is undefined
+source\main.c(26): error:  #20: identifier "display_confirm" is undefined
+source\main.c(76): warning:  #111-D: statement is unreachable
+source\main.c(107): error:  #29: expected an expression
+source\main.c(121): warning:  #1-D: last line of file ends without a newline
+source\main.c(116): warning:  #550-D: variable "is_update" was set but never used
+compiling display.c...
+source\display.c(64): error:  #29: expected an expression
+source\display.c(64): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+".\output\SmartMeter.axf" - 37 Errors, 7 Warning(s).
+Target not created
+Build target 'SmartMeter'
+compiling main.c...
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(71): warning:  #111-D: statement is unreachable
+source\main.c(87): error:  #20: identifier "disp_fun" is undefined
+source\main.c(87): error:  #20: identifier "display_code" is undefined
+source\main.c(102): error:  #29: expected an expression
+source\main.c(116): warning:  #1-D: last line of file ends without a newline
+source\main.c(111): warning:  #550-D: variable "is_update" was set but never used
+compiling display.c...
+source\display.c(64): error:  #29: expected an expression
+source\display.c(64): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+".\output\SmartMeter.axf" - 27 Errors, 7 Warning(s).
+Target not created
+Build target 'SmartMeter'
+compiling main.c...
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(71): warning:  #111-D: statement is unreachable
+source\main.c(87): warning:  #1-D: last line of file ends without a newline
+source\main.c(82): warning:  #550-D: variable "is_update" was set but never used
+compiling display.c...
+source\display.c(64): error:  #29: expected an expression
+source\display.c(64): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+".\output\SmartMeter.axf" - 24 Errors, 7 Warning(s).
+Target not created
+Build target 'SmartMeter'
+compiling display.c...
+source\display.c(63): error:  #29: expected an expression
+source\display.c(63): error:  #29: expected an expression
+source\display.c(64): error:  #29: expected an expression
+source\display.c(64): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+".\output\SmartMeter.axf" - 24 Errors, 0 Warning(s).
+Target not created
+Build target 'SmartMeter'
+compiling display.c...
+source\display.c(63): error:  #29: expected an expression
+source\display.c(63): error:  #29: expected an expression
+source\display.c(64): error:  #29: expected an expression
+source\display.c(64): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+".\output\SmartMeter.axf" - 24 Errors, 0 Warning(s).
+Target not created
+Build target 'SmartMeter'
+compiling display.c...
+source\display.c(65): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+".\output\SmartMeter.axf" - 22 Errors, 0 Warning(s).
+Target not created
+Build target 'SmartMeter'
+compiling display.c...
+source\display.c(63): error:  #29: expected an expression
+source\display.c(63): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+".\output\SmartMeter.axf" - 24 Errors, 0 Warning(s).
+Target not created
+Build target 'SmartMeter'
+compiling display.c...
+source\display.c(65): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+".\output\SmartMeter.axf" - 22 Errors, 0 Warning(s).
+Target not created
+Build target 'SmartMeter'
+compiling display.c...
+source\display.c(63): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+".\output\SmartMeter.axf" - 23 Errors, 0 Warning(s).
+Target not created
+Build target 'SmartMeter'
+compiling display.c...
+source\display.c(63): error:  #20: identifier "disp" is undefined
+source\display.c(63): error:  #57: this operator is not allowed in a constant expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(65): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(66): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(67): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(68): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(69): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(70): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(71): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(72): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(73): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(74): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+source\display.c(75): error:  #29: expected an expression
+".\output\SmartMeter.axf" - 24 Errors, 0 Warning(s).
+Target not created
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22428 RO-data=1292 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22520 RO-data=1296 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling main.c...
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(44): warning:  #111-D: statement is unreachable
+source\main.c(60): warning:  #1-D: last line of file ends without a newline
+source\main.c(55): warning:  #550-D: variable "is_update" was set but never used
+compiling display.c...
+linking...
+Program Size: Code=22560 RO-data=1296 RW-data=316 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 7 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22560 RO-data=1296 RW-data=316 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22484 RO-data=1292 RW-data=316 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22480 RO-data=1296 RW-data=316 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22448 RO-data=1296 RW-data=316 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22452 RO-data=1292 RW-data=316 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling configs.c...
+linking...
+Program Size: Code=22512 RO-data=1296 RW-data=316 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22512 RO-data=1296 RW-data=316 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+compiling my_math.c...
+source\my_math.c(52): warning:  #1-D: last line of file ends without a newline
+linking...
+Program Size: Code=22784 RO-data=1296 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 1 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22788 RO-data=1292 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22792 RO-data=1296 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22788 RO-data=1292 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22824 RO-data=1296 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22832 RO-data=1296 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22920 RO-data=1296 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22916 RO-data=1292 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=22964 RO-data=1292 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23032 RO-data=1296 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23072 RO-data=1296 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23080 RO-data=1296 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23080 RO-data=1296 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23092 RO-data=1292 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23092 RO-data=1292 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23092 RO-data=1292 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23140 RO-data=1292 RW-data=312 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling main.c...
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(33): warning:  #111-D: statement is unreachable
+source\main.c(42): warning:  #1-D: last line of file ends without a newline
+source\main.c(38): warning:  #550-D: variable "is_update" was set but never used
+linking...
+Program Size: Code=23124 RO-data=1292 RW-data=308 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 7 Warning(s).
+Build target 'SmartMeter'
+compiling main.c...
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(32): warning:  #111-D: statement is unreachable
+source\main.c(41): warning:  #1-D: last line of file ends without a newline
+source\main.c(37): warning:  #550-D: variable "is_update" was set but never used
+linking...
+Program Size: Code=23124 RO-data=1292 RW-data=304 ZI-data=3520  
+".\output\SmartMeter.axf" - 0 Errors, 7 Warning(s).
+Build target 'SmartMeter'
+compiling main.c...
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(30): warning:  #111-D: statement is unreachable
+source\main.c(39): warning:  #1-D: last line of file ends without a newline
+source\main.c(35): warning:  #550-D: variable "is_update" was set but never used
+linking...
+Program Size: Code=23124 RO-data=1292 RW-data=300 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 7 Warning(s).
+Build target 'SmartMeter'
+compiling main.c...
+source\openio.h(3): warning:  #1295-D: Deprecated declaration openio_init - give arg types
+source\openio.h(4): warning:  #1295-D: Deprecated declaration openio_input - give arg types
+source\openio.h(5): warning:  #1-D: last line of file ends without a newline
+source\openio.h(5): warning:  #1295-D: Deprecated declaration openio_output - give arg types
+source\main.c(31): warning:  #111-D: statement is unreachable
+source\main.c(40): warning:  #1-D: last line of file ends without a newline
+source\main.c(36): warning:  #550-D: variable "is_update" was set but never used
+linking...
+Program Size: Code=23124 RO-data=1292 RW-data=300 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 7 Warning(s).
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23136 RO-data=1296 RW-data=300 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23216 RO-data=1296 RW-data=300 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23208 RO-data=1296 RW-data=300 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23208 RO-data=1296 RW-data=300 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23212 RO-data=1292 RW-data=300 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23212 RO-data=1292 RW-data=300 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23212 RO-data=1292 RW-data=300 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23208 RO-data=1296 RW-data=300 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'SmartMeter'
+compiling display.c...
+linking...
+Program Size: Code=23212 RO-data=1292 RW-data=300 ZI-data=3524  
+".\output\SmartMeter.axf" - 0 Errors, 0 Warning(s).
+Load "E:\\STM32 Files\\STM32F10x_StdPeriph_Lib_V3.5.0\\Project\\SmartMeter\\output\\SmartMeter.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
